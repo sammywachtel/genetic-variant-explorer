@@ -1,0 +1,838 @@
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg: #0f1117;
+  --bg-card: #1a1d27;
+  --bg-card-hover: #222531;
+  --text: #e1e4ed;
+  --text-dim: #8b90a0;
+  --text-bright: #ffffff;
+  --border: #2a2d3a;
+
+  --risk-bg: #2d1b1b;
+  --risk-border: #6b2c2c;
+  --risk-text: #f5a0a0;
+  --risk-accent: #e85454;
+
+  --protective-bg: #1b2d1e;
+  --protective-border: #2c6b35;
+  --protective-text: #a0f5b0;
+  --protective-accent: #4caf50;
+
+  --clear-bg: #1a1d27;
+  --clear-border: #2a2d3a;
+
+  --neutral-bg: #1e1f2a;
+  --neutral-border: #333546;
+
+  --accent: #6c8cff;
+  --accent-dim: #4a6ad4;
+
+  --person-1: #6c8cff;
+  --person-2: #4ecf6c;
+  --person-3: #e85454;
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Layout ───────────────────────────────────────────────────────────────── */
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 100vh;
+  transition: max-width 0.3s ease;
+}
+
+.app.app-wide {
+  max-width: 1200px;
+}
+
+.app-header {
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* ─── Controls ─────────────────────────────────────────────────────────────── */
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.genome-hint {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 0.7;
+}
+
+.control-group select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b90a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ─── Genome Checkboxes ───────────────────────────────────────────────────── */
+
+.genome-checkboxes {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.genome-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
+.genome-checkbox:hover:not(.disabled) {
+  background: var(--bg-card-hover);
+}
+
+.genome-checkbox.checked {
+  background: var(--bg-card-hover);
+  border-width: 2px;
+  padding: 0.4rem 0.65rem;
+}
+
+.genome-checkbox.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.genome-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.genome-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: capitalize;
+  margin-right: 0.3rem;
+}
+
+.genome-chroms {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* ─── Disease Info ─────────────────────────────────────────────────────────── */
+
+.disease-info {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ─── Loading / Error ──────────────────────────────────────────────────────── */
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-dim);
+  font-size: 1rem;
+}
+
+.error {
+  background: var(--risk-bg);
+  border: 1px solid var(--risk-border);
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--risk-text);
+  margin-bottom: 1rem;
+}
+
+/* ─── Report ───────────────────────────────────────────────────────────────── */
+
+.report-header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+.person-name {
+  text-transform: capitalize;
+}
+
+/* ─── Category Section ─────────────────────────────────────────────────────── */
+
+.category-section {
+  margin-bottom: 2rem;
+}
+
+.category-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-description {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* ─── Interpretation Banner ────────────────────────────────────────────────── */
+
+.interpretation-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #1a2340, #1e2a45);
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.interp-gene {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.interp-people {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.interp-person-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.interp-person-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.interp-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+/* ─── Variant Summary Dots ─────────────────────────────────────────────────── */
+
+.variant-summaries {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.variant-summary {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.summary-person {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  min-width: 4rem;
+}
+
+.summary-dot {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+}
+
+.summary-dot.risk {
+  background: var(--risk-bg);
+  color: var(--risk-text);
+  border: 1px solid var(--risk-border);
+}
+
+.summary-dot.protective {
+  background: var(--protective-bg);
+  color: var(--protective-text);
+  border: 1px solid var(--protective-border);
+}
+
+.summary-dot.clear {
+  background: var(--clear-bg);
+  color: var(--text-dim);
+  border: 1px solid var(--clear-border);
+}
+
+.summary-dot.no-data {
+  background: var(--neutral-bg);
+  color: var(--text-dim);
+  border: 1px solid var(--neutral-border);
+}
+
+/* ─── Variant Cards ────────────────────────────────────────────────────────── */
+
+.variant-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.variant-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  transition: background 0.15s ease;
+  border-left: 3px solid var(--border);
+}
+
+.variant-card:hover {
+  background: var(--bg-card-hover);
+}
+
+/* Card color variations */
+.variant-card.risk-het {
+  border-left-color: var(--risk-accent);
+  background: var(--risk-bg);
+}
+
+.variant-card.risk-hom {
+  border-left-color: var(--risk-accent);
+  background: #351e1e;
+  border-left-width: 4px;
+}
+
+.variant-card.protective-het {
+  border-left-color: var(--protective-accent);
+  background: var(--protective-bg);
+}
+
+.variant-card.protective-hom {
+  border-left-color: var(--protective-accent);
+  background: #1e3521;
+  border-left-width: 4px;
+}
+
+.variant-card.clear {
+  border-left-color: var(--clear-border);
+}
+
+.variant-card.neutral {
+  border-left-color: var(--neutral-border);
+}
+
+.variant-card.no-data {
+  border-left-color: var(--neutral-border);
+  opacity: 0.7;
+}
+
+/* ─── Region Cards ─────────────────────────────────────────────────────────── */
+
+.variant-card.region-card {
+  border-left-color: var(--neutral-border);
+}
+
+.region-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  background: var(--neutral-bg);
+  border: 1px solid var(--neutral-border);
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+}
+
+.region-status {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.region-status.region-empty {
+  color: var(--text-dim);
+}
+
+.region-status.region-noise {
+  color: var(--text-dim);
+}
+
+.region-warning {
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(232, 84, 84, 0.08);
+  border: 1px solid var(--risk-border);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--risk-text);
+  line-height: 1.5;
+}
+
+/* ─── Card internals ──────────────────────────────────────────────────────── */
+
+.variant-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.variant-rsid {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.variant-gene {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.variant-pos {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* ─── Person Genotype (single and comparison) ─────────────────────────────── */
+
+.person-genotype {
+  margin-bottom: 0.4rem;
+}
+
+.comparison-genotypes {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+
+.comparison-genotypes .person-genotype {
+  flex: 1;
+  min-width: 150px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0;
+}
+
+/* Per-person status tints inside comparison boxes */
+.comparison-genotypes .person-status-risk-het,
+.comparison-genotypes .person-status-risk-hom {
+  background: var(--risk-bg);
+}
+
+.comparison-genotypes .person-status-protective-het,
+.comparison-genotypes .person-status-protective-hom {
+  background: var(--protective-bg);
+}
+
+.comparison-genotypes .person-status-no-data {
+  opacity: 0.7;
+}
+
+.person-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.variant-genotype {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.genotype-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.genotype-value {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.genotype-value.missing {
+  font-weight: 400;
+  font-family: inherit;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.hds-value {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  cursor: help;
+  border-bottom: 1px dotted var(--text-dim);
+}
+
+/* ─── Source Badges ───────────────────────────────────────────────────────── */
+
+.source-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.source-badge.source-raw,
+.source-badge.source-phased {
+  background: rgba(76, 175, 80, 0.15);
+  color: #8cd790;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.source-badge.source-imputed {
+  background: rgba(245, 197, 66, 0.12);
+  color: #d4a843;
+  border: 1px solid rgba(245, 197, 66, 0.25);
+}
+
+/* ─── Genome Data Source Tags ─────────────────────────────────────────────── */
+
+.genome-sources {
+  display: flex;
+  gap: 0.2rem;
+  margin-left: 0.3rem;
+}
+
+.genome-source-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.05rem 0.3rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.genome-source-tag.tag-raw,
+.genome-source-tag.tag-phased {
+  background: rgba(76, 175, 80, 0.15);
+  color: #8cd790;
+}
+
+.genome-source-tag.tag-imputed {
+  background: rgba(245, 197, 66, 0.12);
+  color: #d4a843;
+}
+
+.variant-effect {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+
+.variant-mechanism {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.variant-layman {
+  font-size: 0.85rem;
+  color: var(--accent);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(108, 140, 255, 0.08);
+  border-radius: 4px;
+}
+
+.variant-verdict {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* ─── Confidence Badges ───────────────────────────────────────────────────── */
+
+.confidence-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.5rem;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.confidence-icon {
+  font-weight: 900;
+}
+
+.confidence-revised {
+  background: rgba(245, 197, 66, 0.15);
+  color: #d4a843;
+  border: 1px solid rgba(245, 197, 66, 0.3);
+}
+
+.confidence-legacy {
+  background: rgba(255, 152, 0, 0.15);
+  color: #e8943a;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.confidence-disproven {
+  background: rgba(232, 84, 84, 0.15);
+  color: #e85454;
+  border: 1px solid rgba(232, 84, 84, 0.3);
+}
+
+/* Card-level tints for non-current variants */
+.variant-card.card-revised {
+  border-top: 2px solid rgba(245, 197, 66, 0.5);
+}
+
+.variant-card.card-legacy {
+  border-top: 2px solid rgba(255, 152, 0, 0.5);
+  opacity: 0.85;
+}
+
+.variant-card.card-disproven {
+  border-top: 2px solid rgba(232, 84, 84, 0.5);
+  opacity: 0.7;
+}
+
+/* Confidence notes (inline explanation) */
+.confidence-note {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+}
+
+.confidence-note-revised {
+  background: rgba(245, 197, 66, 0.08);
+  color: #d4a843;
+  border-left: 3px solid rgba(245, 197, 66, 0.5);
+}
+
+.confidence-note-legacy {
+  background: rgba(255, 152, 0, 0.08);
+  color: #e8943a;
+  border-left: 3px solid rgba(255, 152, 0, 0.5);
+}
+
+.confidence-note-disproven {
+  background: rgba(232, 84, 84, 0.08);
+  color: #f5a0a0;
+  border-left: 3px solid rgba(232, 84, 84, 0.5);
+}
+
+/* ─── Studies Panel ───────────────────────────────────────────────────────── */
+
+.studies-panel {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.4rem;
+}
+
+.studies-toggle {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: inherit;
+}
+
+.studies-toggle:hover {
+  color: var(--text);
+}
+
+.last-reviewed {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.7;
+  margin-left: 0.5rem;
+  font-style: italic;
+}
+
+.studies-list {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.study-entry {
+  padding: 0.3rem 0.5rem;
+  background: rgba(108, 140, 255, 0.04);
+  border-radius: 4px;
+  border-left: 2px solid var(--accent-dim);
+}
+
+.study-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.study-link:hover {
+  text-decoration: underline;
+}
+
+.study-journal {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.study-finding {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-top: 0.15rem;
+}
+
+/* ─── Footer ───────────────────────────────────────────────────────────────── */
+
+.app-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.app-footer p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .variant-header {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .variant-pos {
+    margin-left: 0;
+  }
+
+  .comparison-genotypes {
+    flex-direction: column;
+  }
+}

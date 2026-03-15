@@ -1,0 +1,317 @@
+# Hereditary Transthyretin Amyloidosis (hATTR) — Genetic Variant Database
+# Pure research data. No individual genomes, no personal results.
+# All coordinates: GRCh38 (hg38), verified against NCBI dbSNP + ClinVar.
+#
+# Nomenclature note:
+#   TTR variants historically use "mature protein" numbering (after cleaving
+#   the 20-residue signal peptide). Modern HGVS uses full-length numbering.
+#   So V30M = p.Val50Met, V122I = p.Val142Ile, etc. Both are shown below.
+#
+# Sources:
+#   - Connors et al. 2003 (Amyloid) — ATTR variant registry
+#   - Rapezzi et al. 2013 (European Heart Journal) — genotype-phenotype review
+#   - Benson & Kincaid 2007 (JIMD Reports) — TTR mutation database
+#   - Conceicao et al. 2019 (Orphanet J Rare Dis) — V30M natural history
+#   - Jacobson et al. 1997 (NEJM) — V122I in African Americans
+#   - Reilly et al. 1995 (Brain) — T60A in Irish/British populations
+#   - Husby et al. 1986 (Clin Genet) — L111M Danish kindred
+#   - Maurer et al. 2023 (Eur Heart J) — tafamidis/acoramidis stabilizers
+#   - ClinVar (NCBI) — variant classification
+#   - dbSNP (NCBI) — rs identifiers and GRCh38 coordinates
+#   - gnomAD v4 — population allele frequencies
+#
+# Effect directions:
+#   "risk" — effect_allele causes amyloid formation / disease
+
+version: "1.0"
+
+disease: "Hereditary Transthyretin Amyloidosis (hATTR)"
+description: >
+  Curated pathogenic TTR variants associated with hereditary transthyretin
+  amyloidosis (hATTR / ATTR amyloidosis). TTR encodes transthyretin, a
+  homotetrameric protein that transports thyroxine and retinol-binding protein
+  in serum and cerebrospinal fluid. Pathogenic variants destabilize the tetramer,
+  causing dissociation into monomers that misfold and aggregate into amyloid
+  fibrils deposited in nerves, heart, and other organs. Over 150 amyloidogenic
+  TTR variants have been identified. Coordinates verified against dbSNP GRCh38.
+
+categories:
+
+  ############################################################
+  # High-prevalence / globally significant TTR variants
+  ############################################################
+
+  - name: "Major Pathogenic Variants"
+    description: >
+      The most clinically significant TTR variants worldwide. These are
+      well-characterized, appear in multiple populations, and account for
+      the majority of diagnosed hATTR cases. Each destabilizes the TTR
+      tetramer through a slightly different structural mechanism, producing
+      phenotypes ranging from pure neuropathy to pure cardiomyopathy.
+    variants:
+
+      # ── V30M (Val30Met / p.Val50Met) ────────────────────────
+      - rsid: rs28933979
+        chrom: chr18
+        pos: 31592974
+        ref: G
+        alt: A
+        gene: TTR
+        effect: "V30M (p.Val50Met) — most common hATTR variant worldwide; familial amyloid polyneuropathy"
+        effect_allele: A
+        effect_direction: risk
+        mechanism: >
+          The G>A substitution at c.148 replaces valine with methionine at position
+          50 (mature protein position 30). Val30 sits at the dimer-dimer interface
+          of the TTR tetramer. Methionine's larger side chain disrupts hydrophobic
+          packing at this interface, lowering the kinetic barrier to tetramer
+          dissociation. The resulting monomers misfold into cross-beta amyloid
+          fibrils that deposit preferentially in peripheral nerves.
+        layman: >
+          TTR normally forms a stable four-part protein complex. This mutation
+          weakens the glue holding the four parts together. When they fall apart,
+          the individual pieces misfold and clump into fibers that damage nerves
+          in the hands and feet, causing numbness and pain. It's the most common
+          form of hereditary transthyretin amyloidosis, found in families from
+          Portugal, Sweden, Japan, and many other countries.
+        source: "Conceicao et al. 2019; ClinVar VCV000013417; Saraiva 1995"
+
+      # ── V122I (Val122Ile / p.Val142Ile) ─────────────────────
+      - rsid: rs76992529
+        chrom: chr18
+        pos: 31598655
+        ref: G
+        alt: A
+        gene: TTR
+        effect: "V122I (p.Val142Ile) — most common cardiac hATTR variant; ~3.5% carrier frequency in African Americans"
+        effect_allele: A
+        effect_direction: risk
+        mechanism: >
+          The G>A substitution at c.424 replaces valine with isoleucine at position
+          142 (mature protein position 122). Val122 is located in the H-beta strand
+          near the C-terminus, at the AB loop interface critical for tetramer
+          stability. The isoleucine substitution subtly alters hydrophobic contacts,
+          accelerating tetramer dissociation. Misfolded monomers form amyloid
+          fibrils that deposit predominantly in cardiac tissue, causing restrictive
+          cardiomyopathy.
+        layman: >
+          About 1 in 29 African Americans carries this variant — roughly 1.5 million
+          people in the US alone. It weakens the TTR protein just enough that by
+          age 60-70, amyloid fibers start building up in the heart muscle, making
+          it stiff and unable to pump properly. This is a treatable cause of heart
+          failure that is dramatically underdiagnosed. If you're of African descent
+          with unexplained heart failure after age 60, this variant is worth testing.
+        source: "Jacobson et al. 1997 (NEJM); ClinVar VCV000013426; gnomAD"
+
+      # ── T60A (Thr60Ala / p.Thr80Ala) ───────────────────────
+      - rsid: rs121918070
+        chrom: chr18
+        pos: 31595157
+        ref: A
+        alt: G
+        gene: TTR
+        effect: "T60A (p.Thr80Ala) — most common hATTR variant in UK/Ireland; mixed cardiac-neuropathic phenotype"
+        effect_allele: G
+        effect_direction: risk
+        mechanism: >
+          The A>G substitution at c.238 replaces threonine (polar) with alanine
+          (non-polar) at position 80 (mature protein position 60). This residue is
+          in the D-strand of the beta-sandwich. The loss of the hydroxyl group
+          eliminates a hydrogen bond that stabilizes the monomer fold, increasing
+          local conformational flexibility and promoting tetramer dissociation under
+          physiological conditions.
+        layman: >
+          The most common form of hereditary amyloidosis in the UK and Ireland,
+          with a hotspot in County Donegal, Ireland. It causes both heart and nerve
+          damage, typically starting around age 60 with heart failure symptoms.
+          The nerve involvement tends to be less prominent than with V30M but the
+          cardiac disease is often severe. Late onset and cardiac dominance mean
+          it's frequently misdiagnosed as "old age" heart failure.
+        source: "Reilly et al. 1995 (Brain); ClinVar VCV000013421; Damy et al. 2022"
+
+
+  ############################################################
+  # Cardiac-dominant TTR variants
+  ############################################################
+
+  - name: "Cardiac-Dominant Variants"
+    description: >
+      TTR variants where the primary clinical manifestation is amyloid
+      cardiomyopathy (restrictive heart failure, conduction abnormalities,
+      arrhythmias). Peripheral neuropathy may be absent or subclinical.
+      Cardiac-dominant variants tend to produce coarser, more focal amyloid
+      deposits in myocardial tissue.
+    variants:
+
+      # ── L111M (Leu111Met / p.Leu131Met) ────────────────────
+      - rsid: rs121918073
+        chrom: chr18
+        pos: 31598622
+        ref: C
+        alt: A
+        gene: TTR
+        effect: "L111M (p.Leu131Met) — Danish cardiac amyloidosis variant"
+        effect_allele: A
+        effect_direction: risk
+        mechanism: >
+          The C>A substitution at c.391 replaces leucine with methionine at position
+          131 (mature protein position 111). Leu111 is in the G-strand, a region
+          critical for monomer-monomer contacts within each dimer. Methionine's
+          sulfur-containing side chain disrupts the tight leucine zipper-like
+          packing, destabilizing the dimer interface and accelerating the cascade
+          toward amyloid formation. Fibrils deposit heavily in the myocardium
+          and cardiac conduction system.
+        layman: >
+          First identified in a Danish family in the 1960s. This mutation
+          causes severe heart muscle stiffening, often leading to heart failure
+          and dangerous heart rhythm problems. Unlike V30M, the nerves are
+          mostly spared — the amyloid really zeroes in on the heart. Liver
+          transplant (to remove the source of mutant TTR) has been used as
+          treatment, but timing is critical.
+        source: "Husby et al. 1986; ClinVar RCV000014366"
+
+      # ── I68L (Ile68Leu / p.Ile88Leu) ───────────────────────
+      - rsid: rs121918085
+        chrom: chr18
+        pos: 31595181
+        ref: A
+        alt: T
+        gene: TTR
+        effect: "I68L (p.Ile88Leu) — predominantly cardiac phenotype with variable neuropathy"
+        effect_allele: T
+        effect_direction: risk
+        mechanism: >
+          The A>T substitution at c.262 replaces isoleucine with leucine at position
+          88 (mature protein position 68). Though both are hydrophobic branched-chain
+          amino acids, the subtle difference in side-chain geometry at this position
+          in the E-strand alters beta-sheet packing, reducing tetramer stability.
+          The conformational change preferentially drives amyloid deposition in
+          cardiac tissue, though neurological involvement occurs in roughly
+          two-thirds of patients.
+        layman: >
+          An interesting case where swapping one very similar amino acid for
+          another is enough to cause disease. The heart takes the brunt of the
+          damage, but careful neurological examination reveals nerve involvement
+          in most patients too — it's just overshadowed by the cardiac symptoms.
+          Found in Italian families and others across Europe.
+        source: "ClinVar VCV000017969; Rapezzi et al. 2013; gnomAD 0.004% European"
+
+      # ── S77Y (Ser77Tyr / p.Ser97Tyr) ───────────────────────
+      - rsid: rs121918071
+        chrom: chr18
+        pos: 31595209
+        ref: C
+        alt: A
+        gene: TTR
+        effect: "S77Y (p.Ser97Tyr) — mixed cardiac-neuropathic phenotype; second most prevalent TTR mutation globally"
+        effect_allele: A
+        effect_direction: risk
+        mechanism: >
+          The C>A substitution at c.290 replaces serine (small, polar) with
+          tyrosine (bulky, aromatic) at position 97 (mature protein position 77).
+          This dramatic size increase in the EF-helix region disrupts local
+          structure and reduces conformational stability of both monomers and
+          tetramers. Experimental studies confirm significantly reduced kinetic
+          stability compared to wild-type TTR.
+        layman: >
+          First described in 1986 in an American family of German descent. Causes
+          numbness in the feet and hands that gradually worsens, followed by
+          heart problems including heart failure and dangerous arrhythmias.
+          Conjunctival lymphangiectasia (swollen lymph vessels in the eyes) is a
+          distinctive clinical sign associated with more severe disease. After
+          V30M, this is the second most common TTR mutation in many countries.
+        source: "Nichols et al. 1986; ClinVar VCV000013422; gnomAD absent"
+
+
+  ############################################################
+  # Other clinically significant variants
+  ############################################################
+
+  - name: "Other Clinically Significant Variants"
+    description: >
+      Additional well-characterized pathogenic TTR variants with distinct
+      geographic distributions and clinical profiles. Each has been validated
+      in multiple families and reported in ClinVar as pathogenic.
+    variants:
+
+      # ── A97S (Ala97Ser / p.Ala117Ser) ──────────────────────
+      - rsid: rs121918074
+        chrom: chr18
+        pos: 31598580
+        ref: G
+        alt: T
+        gene: TTR
+        effect: "A97S (p.Ala117Ser) — major Taiwanese FAP variant; late-onset, rapidly progressive"
+        effect_allele: T
+        effect_direction: risk
+        mechanism: >
+          The G>T substitution at c.349 replaces alanine (small, hydrophobic) with
+          serine (polar) at position 117 (mature protein position 97). Ala97 is in
+          the FG-loop, and the polar serine side chain disrupts the local packing
+          density, creating conformational instability in the native tetramer.
+          Molecular dynamics simulations show increased flexibility of the FG-loop
+          region, promoting tetramer dissociation.
+        layman: >
+          The most common TTR mutation in Taiwan, causing a late-onset but
+          rapidly worsening form of amyloidosis. Symptoms typically appear
+          after age 50 with numbness and tingling in the extremities, along
+          with gut problems (diarrhea, weight loss) and heart involvement.
+          Once symptoms start, the disease tends to progress faster than V30M,
+          making early detection and treatment critical.
+        source: "Liu et al. 2008; ClinVar RCV000014410; rs121918074"
+
+      # ── E89Q (Glu89Gln / p.Glu109Gln) ─────────────────────
+      - rsid: rs121918082
+        chrom: chr18
+        pos: 31595244
+        ref: G
+        alt: C
+        gene: TTR
+        effect: "E89Q (p.Glu109Gln) — most common TTR variant in Italy; founder effect in Bulgaria"
+        effect_allele: C
+        effect_direction: risk
+        mechanism: >
+          The G>C substitution at c.325 replaces glutamic acid (acidic, charged)
+          with glutamine (neutral, polar) at position 109 (mature protein position
+          89). This charge-neutralizing substitution in the G-strand disrupts an
+          electrostatic network that stabilizes the tetramer interface. Loss of
+          the negative charge weakens inter-subunit salt bridges, lowering the
+          barrier to dissociation.
+        layman: >
+          The most common TTR mutation in Italy and also found frequently in
+          Bulgaria due to a founder effect (a single ancestral carrier whose
+          descendants spread the mutation). Causes a mixed picture of both
+          heart and nerve damage. Studies comparing Italian and Bulgarian
+          patients with the same mutation show that geographic factors and
+          genetic background can influence how severe the disease becomes —
+          a reminder that a single mutation doesn't tell the whole story.
+        source: "Rapezzi et al. 2013; Kirov et al. 2019; ClinVar VCV000013442; gnomAD absent"
+
+      # ── Y114C (Tyr114Cys / p.Tyr134Cys) ────────────────────
+      - rsid: rs121918075
+        chrom: chr18
+        pos: 31598632
+        ref: A
+        alt: G
+        gene: TTR
+        effect: "Y114C (p.Tyr134Cys) — aggressive variant with ~10-year survival post-onset"
+        effect_allele: G
+        effect_direction: risk
+        mechanism: >
+          The A>G substitution at c.401 replaces tyrosine (bulky, aromatic) with
+          cysteine (small, thiol-containing) at position 134 (mature protein
+          position 114). The loss of the aromatic ring destabilizes local
+          beta-sheet packing in the H-strand. Additionally, the free thiol group
+          of cysteine can form aberrant disulfide bonds, promoting non-native
+          oligomeric species that accelerate amyloid nucleation. The mutant
+          protein is more easily depolymerized to form amyloid fibrils than
+          wild-type TTR.
+        layman: >
+          One of the more aggressive TTR mutations. Average survival is about
+          10 years after symptoms appear, which is shorter than most other
+          variants. The cysteine substitution introduces a reactive chemical
+          group that may accelerate the clumping process. Found in Chinese,
+          Japanese, and South American families. Curcumin (the spice compound)
+          has shown some ability to reduce mutant TTR aggregation in cell models,
+          but clinical evidence for this is not established.
+        source: "Li et al. 2011; ClinVar VCV000013419; gnomAD absent"

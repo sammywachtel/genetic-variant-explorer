@@ -1,0 +1,1760 @@
+# Alzheimer's Disease — Genetic Variant Database
+# Pure research data. No individual genomes, no personal results.
+# All coordinates: GRCh38 (hg38), verified against NCBI dbSNP.
+#
+# Sources (original):
+#   - Lambert et al. 2013 (Nature Genetics) — IGAP meta-analysis
+#   - Kunkle et al. 2019 (Nature Genetics) — largest AD GWAS at the time
+#   - Hollingworth et al. 2011 (Nature Genetics) — CD2AP, CD33
+#   - Jonsson et al. 2012 (Nature) — APP A673T (Icelandic protective)
+#   - Jonsson et al. 2013 (NEJM) — TREM2 R47H
+#   - Sims et al. 2017 (Nature Genetics) — TREM2 R62H, PLCG2, ABI3
+#   - Arboleda-Velasquez et al. 2019 (Nature Medicine) — APOE Christchurch
+#   - Strittmatter et al. 1993 (PNAS) — APOE e2/e3/e4
+#
+# Sources (2022-2026 updates):
+#   - Bellenguez et al. 2022 (Nature Genetics) — 75 loci, 42 novel
+#   - Wightman et al. 2021 (Nature Genetics) — 1.1M individuals
+#   - Willett et al. 2025 (Alzheimer's & Dementia) — multi-ancestry WGS
+#   - Various 2024-2026 mechanistic and biomarker studies (see per-variant)
+#
+# Effect directions:
+#   "risk"       — effect_allele increases AD risk
+#   "protective" — effect_allele decreases AD risk
+#
+# Confidence statuses:
+#   "current"   — mechanism and direction supported by current research
+#   "revised"   — association holds, but mechanism/interpretation updated
+#   "legacy"    — relevance or mechanism questioned by recent research
+#   "disproven" — evidence no longer supports original association
+#
+# Last full review: 2026-03-11
+
+version: "2.0"
+
+disease: "Alzheimer's Disease"
+description: >
+  Curated Alzheimer's disease genetic variants derived from validated
+  genome-wide association studies, rare variant studies, and deterministic
+  early-onset Alzheimer's disease genes. Updated March 2026 to reflect
+  post-amyloid-cascade understanding: AD is now recognized as a
+  multifactorial disease driven by neuroinflammation, lipid dysfunction,
+  tau propagation, blood-brain barrier disruption, and amyloid pathology
+  acting in concert. Confidence flags indicate where the original
+  amyloid-centric framing has been revised. Coordinates verified against
+  dbSNP GRCh38.
+
+categories:
+
+  ############################################################
+  # APOE Core Risk Variants
+  ############################################################
+
+  - name: "APOE Variants"
+    description: >
+      The APOE gene on chromosome 19 is the strongest common genetic risk
+      factor for late-onset Alzheimer's. Two SNPs define three haplotypes
+      (E2, E3, E4). E3 is the most common and considered baseline. E4
+      increases risk (~3-4x per copy). E2 is mildly protective. APOE's
+      role extends far beyond amyloid clearance: it regulates blood-brain
+      barrier integrity, lipid transport, microglial activation state,
+      and oligodendrocyte function.
+    variants:
+      - rsid: rs429358
+        chrom: chr19
+        pos: 44908684
+        ref: T
+        alt: C
+        gene: APOE
+        effect: "Part of APOE e4 haplotype; strongest common genetic risk factor"
+        effect_allele: C
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          The amyloid clearance mechanism described in the original entry was
+          accurate but vastly incomplete. APOE4 now understood to act through
+          multiple pathways: BBB disruption (CypA-MMP9), lipid droplet
+          accumulation in microglia, impaired oligodendrocyte function
+          (LXRb/ABCA1 pathway causing demyelination), and promotion of
+          pro-inflammatory microglial states independent of amyloid. Amyloid
+          clearance is perhaps 30% of the full picture.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          The C allele at this position changes amino acid 112 from cysteine to
+          arginine, defining the E4 isoform. APOE4 acts through multiple
+          pathways: (1) reduced amyloid-beta clearance and promoted aggregation,
+          (2) blood-brain barrier disruption via the CypA-MMP9 pathway,
+          (3) lipid droplet accumulation in microglia impairing their function,
+          (4) impaired oligodendrocyte myelination through the LXRb/ABCA1
+          pathway, and (5) promotion of a pro-inflammatory microglial state
+          independent of amyloid pathology.
+        layman: >
+          This is one of two positions that determines your APOE type (E2, E3, or E4).
+          The C allele here means E4, which is the biggest common genetic risk factor
+          for Alzheimer's. One copy roughly triples your risk; two copies increase
+          it ~12-fold. APOE4 affects many brain systems beyond amyloid: it weakens
+          the blood-brain barrier, impairs the brain's immune cells, and disrupts
+          the insulation around nerve fibers. Most E4 carriers never develop AD —
+          it shifts probability, not destiny.
+        source: "Strittmatter et al. 1993"
+        studies:
+          - id: strittmatter_1993
+            title: "Apolipoprotein E: high-avidity binding to beta-amyloid and increased frequency of type 4 allele in late-onset familial Alzheimer disease"
+            authors: "Strittmatter et al."
+            year: 1993
+            journal: "PNAS"
+            doi: "10.1073/pnas.90.5.1977"
+            url: "https://doi.org/10.1073/pnas.90.5.1977"
+            finding: "Original discovery of APOE4 as AD risk factor"
+          - id: montagne_2020
+            title: "APOE4 leads to blood-brain barrier dysfunction predicting cognitive decline"
+            authors: "Montagne et al."
+            year: 2020
+            journal: "Nature"
+            doi: "10.1038/s41586-020-2247-3"
+            url: "https://doi.org/10.1038/s41586-020-2247-3"
+            finding: "APOE4 carriers show BBB breakdown in hippocampus independent of amyloid or tau, mediated by CypA-MMP9 pathway"
+          - id: victor_2022
+            title: "Lipid accumulation induced by APOE4 impairs microglial surveillance of neuronal-network activity"
+            authors: "Victor et al."
+            year: 2022
+            journal: "Cell Stem Cell"
+            doi: "10.1016/j.stem.2022.09.005"
+            url: "https://doi.org/10.1016/j.stem.2022.09.005"
+            finding: "APOE4 causes lipid droplet accumulation in microglia, impairing surveillance function"
+          - id: blanchard_2022
+            title: "APOE4 impairs myelination via cholesterol dysregulation in oligodendrocytes"
+            authors: "Blanchard et al."
+            year: 2022
+            journal: "Nature"
+            doi: "10.1038/s41586-022-05439-w"
+            url: "https://doi.org/10.1038/s41586-022-05439-w"
+            finding: "APOE4 impairs cholesterol transport to oligodendrocytes via LXRb/ABCA1 pathway"
+
+      - rsid: rs7412
+        chrom: chr19
+        pos: 44908822
+        ref: C
+        alt: T
+        gene: APOE
+        effect: "Part of APOE e2 haplotype; protective against AD"
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: revised
+        confidence_note: >
+          Original mechanism focused solely on amyloid-beta binding. APOE2's
+          protection now understood to involve superior lipid transport, better
+          BBB maintenance, and anti-inflammatory signaling.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          The T allele at this position changes amino acid 158 from arginine to
+          cysteine, defining the E2 isoform. APOE2 provides protection through
+          multiple mechanisms: more efficient lipid transport supporting neuronal
+          membrane integrity, better blood-brain barrier maintenance, enhanced
+          anti-inflammatory signaling in microglia, and more effective amyloid-beta
+          clearance compared to E3/E4.
+        layman: >
+          The other position that determines your APOE type. The T allele here
+          means E2, which is mildly protective against Alzheimer's. E2 carriers
+          have roughly half the average risk. E2 helps the brain in several ways:
+          better fat transport to brain cells, stronger blood-brain barrier, and
+          calmer immune response. E2/E2 is uncommon (~1% of people).
+        source: "Strittmatter et al. 1993"
+        studies:
+          - id: strittmatter_1993
+            title: "Apolipoprotein E: high-avidity binding to beta-amyloid"
+            authors: "Strittmatter et al."
+            year: 1993
+            journal: "PNAS"
+            doi: "10.1073/pnas.90.5.1977"
+            url: "https://doi.org/10.1073/pnas.90.5.1977"
+            finding: "Original characterization of APOE isoforms and AD risk"
+
+      - rsid: rs121918393
+        chrom: chr19
+        pos: 44908756
+        ref: C
+        alt: A
+        gene: APOE
+        effect: "R136S (Christchurch mutation); protects against AD even in high-risk carriers"
+        effect_allele: A
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          Confirmed and extended. E2-Christchurch combination suppresses tau
+          tangles in tau models. Being explored as gene therapy target.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          The Christchurch mutation (R136S) reduces APOE's ability to bind
+          heparan sulfate proteoglycans, limiting amyloid-beta uptake into
+          neurons. Even in PSEN1 mutation carriers, this variant delayed onset
+          by decades. Recent work shows E2-Christchurch also suppresses tau
+          tangle formation.
+        layman: >
+          An extremely rare mutation found in a Colombian family. One woman carrying
+          genes that should have caused Alzheimer's in her 40s didn't develop symptoms
+          until her 70s. It works by limiting toxic protein uptake and suppressing tau
+          tangles. Being studied as a potential gene therapy approach.
+        source: "Arboleda-Velasquez et al. 2019 (Nature Medicine)"
+        studies:
+          - id: arboleda_2019
+            title: "Resistance to autosomal dominant Alzheimer's disease in an APOE3 Christchurch homozygote"
+            authors: "Arboleda-Velasquez et al."
+            year: 2019
+            journal: "Nature Medicine"
+            doi: "10.1038/s41591-019-0611-3"
+            url: "https://doi.org/10.1038/s41591-019-0611-3"
+            finding: "APOE3ch homozygosity protected against autosomal dominant AD, delaying onset by ~3 decades"
+
+      - rsid: rs63750847
+        chrom: chr21
+        pos: 25897620
+        ref: C
+        alt: T
+        gene: APP
+        effect: "A673T (Icelandic mutation). Reduces amyloid production."
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          Mechanism confirmed and unchanged. One of the strongest pieces of
+          evidence that amyloid production does contribute to AD.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          This mutation sits right next to the beta-secretase cleavage site on APP,
+          reducing cleavage by ~40%. Less cleavage means less amyloid-beta production.
+        layman: >
+          A rare protective mutation discovered in Iceland. It makes the APP protein
+          harder for enzymes to cut, so less toxic amyloid gets produced. Carriers
+          have roughly 5x lower risk of Alzheimer's. Very rare outside Scandinavia.
+        source: "Jonsson et al. 2012 (Nature)"
+        studies:
+          - id: jonsson_2012
+            title: "A mutation in APP protects against Alzheimer's disease and age-related cognitive decline"
+            authors: "Jonsson et al."
+            year: 2012
+            journal: "Nature"
+            doi: "10.1038/nature11283"
+            url: "https://doi.org/10.1038/nature11283"
+            finding: "A673T reduces beta-cleavage of APP by ~40%, conferring ~5x protection against AD"
+
+    interpreters:
+      - gene: APOE
+        function: apoe_genotype
+        description: "Combines rs429358 + rs7412 to determine E2/E3/E4 haplotype."
+
+
+  ############################################################
+  # Established Common GWAS Loci
+  ############################################################
+
+  - name: "Established GWAS Loci"
+    description: >
+      Common variants replicated across multiple Alzheimer's GWAS
+      meta-analyses (IGAP 2013, Kunkle 2019, Bellenguez 2022). Each
+      contributes a modest effect (OR typically 0.8-1.3). Many were
+      originally described in terms of amyloid clearance; current
+      understanding recognizes broader roles in neuroinflammation,
+      lipid metabolism, tau propagation, and synaptic maintenance.
+    variants:
+      - rsid: rs6656401
+        chrom: chr1
+        pos: 207518704
+        ref: A
+        alt: G
+        gene: CR1
+        effect: "Complement receptor 1 locus"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          Original mechanism (reduced amyloid clearance) may be directionally
+          wrong. 2025 data shows CR1*2 ENHANCES phagocytosis, suggesting
+          excessive complement-mediated synaptic pruning as risk mechanism.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          CR1 encodes complement receptor 1. The CR1*2 risk variant shows lower
+          protein expression but paradoxically enhanced phagocytic function — glia
+          more aggressively engulf opsonized targets including synaptoneurosomes.
+          Risk likely comes from excessive complement-mediated synaptic pruning
+          rather than impaired amyloid clearance. Complement dysregulation is now
+          viewed as a primary AD contributor.
+        layman: >
+          Your immune system tags brain debris for cleanup. This variant makes the
+          cleanup crew more aggressive — which sounds good, but they also attack
+          healthy synapses (brain connections). The risk is from over-pruning healthy
+          connections, not from failing to clear amyloid.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification of CR1 as AD risk locus"
+          - id: cr1_phagocytosis_2025
+            title: "The AD-associated complement receptor 1 variant confers risk by impacting glial phagocytosis"
+            authors: "Various"
+            year: 2025
+            journal: "Nature Neuroscience"
+            url: "https://pubmed.ncbi.nlm.nih.gov/40631443/"
+            finding: "CR1*2 shows enhanced phagocytosis despite lower expression, suggesting excessive synaptic pruning"
+
+      - rsid: rs3865444
+        chrom: chr19
+        pos: 51224706
+        ref: C
+        alt: A
+        gene: CD33
+        effect: "Microglial immune regulation locus"
+        effect_allele: A
+        effect_direction: protective
+        confidence_status: revised
+        confidence_note: >
+          Core association holds but mechanism more nuanced. CD33 isoforms
+          (CD33M vs CD33m) have distinct regulatory roles. CD33 negatively
+          regulates TREM2 downstream signaling in coordinated circuits.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          CD33 is expressed on microglia. The protective A allele promotes the
+          shorter CD33m isoform which releases the brake on TREM2 downstream
+          signaling, enhancing phagocytosis. AD-associated CD33M isoforms
+          suppress TREM2 signaling through coordinated feedback loops involving
+          PTPN6, CASS4, and SRC in specific microglial subtypes.
+        layman: >
+          Microglia are your brain's immune cells. CD33 puts the brakes on them.
+          The protective version produces a shorter protein that can't brake
+          effectively, letting immune cells do their cleanup job. It specifically
+          works through the TREM2 system — one of the most important immune
+          pathways in Alzheimer's.
+        source: "Hollingworth et al. 2011; Lambert et al. 2013"
+        studies:
+          - id: hollingworth_2011
+            title: "Common variants at ABCA7, MS4A6A/MS4A4E, EPHA1, CD33 and CD2AP"
+            authors: "Hollingworth et al."
+            year: 2011
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.803"
+            url: "https://doi.org/10.1038/ng.803"
+            finding: "Original identification of CD33 as AD locus"
+          - id: cd33_isoforms_2024
+            title: "AD-associated isoforms of human CD33 distinctively modulate microglial responses"
+            authors: "Various"
+            year: 2024
+            journal: "Molecular Neurodegeneration"
+            doi: "10.1186/s13024-024-00734-8"
+            url: "https://doi.org/10.1186/s13024-024-00734-8"
+            finding: "CD33M and CD33m isoforms have distinct regulatory effects beyond simple phagocytosis"
+
+      - rsid: rs9349407
+        chrom: chr6
+        pos: 47485642
+        ref: G
+        alt: C
+        gene: CD2AP
+        effect: "Endocytosis / synaptic trafficking pathway locus"
+        effect_allele: C
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          Now understood more broadly as affecting lipid trafficking and
+          synaptic protein recycling, not just amyloid clearance.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          CD2AP is involved in endocytosis and receptor trafficking at synapses.
+          Disruption affects lipid trafficking, synaptic protein recycling, and
+          the endosomal-lysosomal system broadly. CD2AP loss also compromises
+          the blood-brain barrier and tau propagation pathways.
+        layman: >
+          Cells have an internal recycling system for clearing waste and moving
+          fats around. This variant makes that system less efficient, affecting
+          multiple aspects of brain cell health — not just amyloid but also
+          how synapses maintain themselves.
+        source: "Hollingworth et al. 2011"
+        studies:
+          - id: hollingworth_2011
+            title: "Common variants at ABCA7, MS4A6A/MS4A4E, EPHA1, CD33 and CD2AP"
+            authors: "Hollingworth et al."
+            year: 2011
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.803"
+            url: "https://doi.org/10.1038/ng.803"
+            finding: "Original GWAS identification"
+
+      - rsid: rs983392
+        chrom: chr11
+        pos: 60156035
+        ref: A
+        alt: G
+        gene: MS4A6A
+        effect: "MS4A immune gene cluster locus"
+        effect_allele: G
+        effect_direction: protective
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          MS4A6A is part of a cluster of membrane-spanning genes expressed in
+          myeloid cells and microglia. The protective allele modulates microglial
+          activation and neuroinflammatory responses. Part of an immune-sensing
+          cluster alongside CD33 and INPP5D.
+        layman: >
+          Part of a family of genes that affect how brain immune cells behave.
+          The protective version fine-tunes the immune response — enough to
+          fight problems but not so much that it causes inflammation damage.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+
+      - rsid: rs35349669
+        chrom: chr2
+        pos: 233159830
+        ref: C
+        alt: T
+        gene: INPP5D
+        effect: "Microglial signaling gene (SHIP1)"
+        effect_allele: C
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          Oversimplified as "pro-inflammatory." INPP5D/SHIP1 is a negative
+          regulator of phagocytic capacity with context-dependent phenotypes
+          operating in coordinated microglial circuits.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          INPP5D (SHIP1) is a lipid phosphatase that dephosphorylates PIP3,
+          negatively regulating TREM2 downstream signaling and phagocytic
+          capacity. Effects vary by microglial subtype and disease stage.
+          Operates in circuits with NLRP3 inflammasome activation.
+        layman: >
+          This gene controls a signaling switch inside brain immune cells. Rather
+          than simply making cells overactive, it regulates how well they can
+          engulf and clear debris. The effect is complex and depends on disease
+          stage and which type of immune cell is involved.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+          - id: inpp5d_nlrp3_2023
+            title: "Microglial function, INPP5D/SHIP1 signaling, and NLRP3 inflammasome activation"
+            authors: "Various"
+            year: 2023
+            journal: "Molecular Neurodegeneration"
+            doi: "10.1186/s13024-023-00674-9"
+            url: "https://doi.org/10.1186/s13024-023-00674-9"
+            finding: "INPP5D modulates NLRP3 inflammasome with context-dependent effects"
+
+      - rsid: rs1476679
+        chrom: chr7
+        pos: 100406823
+        ref: C
+        alt: T
+        gene: ZCWPW1
+        effect: "LOAD-associated GWAS locus"
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ZCWPW1 is involved in epigenetic regulation (reading histone marks).
+          The protective allele may influence gene expression patterns that
+          support neuronal health and synaptic maintenance.
+        layman: >
+          This gene helps read chemical marks on DNA that control which genes
+          are turned on or off. The protective version helps maintain healthier
+          gene activity patterns in brain cells as you age.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+
+      - rsid: rs190982
+        chrom: chr5
+        pos: 88927603
+        ref: G
+        alt: A
+        gene: MEF2C
+        effect: "Neuronal transcription factor locus"
+        effect_allele: A
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          Confirmed. Also part of microglial transcriptional network with SPI1/PU.1.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          MEF2C is a transcription factor critical for neuronal development,
+          synaptic plasticity, and memory formation. Also part of a microglial
+          transcriptional network regulated by SPI1/PU.1.
+        layman: >
+          MEF2C is a master switch for brain cell health and memory formation.
+          It works in both nerve cells and immune cells. The protective version
+          keeps this switch working better for longer.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+
+      - rsid: rs3851179
+        chrom: chr11
+        pos: 86157598
+        ref: T
+        alt: C
+        gene: PICALM
+        effect: "Promoter variant affecting endocytosis. OR ~0.88 per copy."
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          Endocytic function confirmed. Role in tau clearance increasingly
+          recognized alongside amyloid clearance.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          PICALM is essential for clathrin-mediated endocytosis. The protective
+          allele enhances PICALM expression, improving autophagy and clearance
+          of both amyloid-beta and tau through the endosomal-lysosomal pathway.
+        layman: >
+          Cells have a built-in vacuum cleaner for waste. This gene keeps that
+          vacuum running well. The protective version means more efficient cleanup
+          of both amyloid and tau — the two toxic proteins in Alzheimer's.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+
+      - rsid: rs11136000
+        chrom: chr8
+        pos: 27607002
+        ref: T
+        alt: C
+        gene: CLU
+        effect: "Clusterin variant, involved in multiple protective pathways."
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: revised
+        confidence_note: >
+          Amyloid chaperone function confirmed, but clusterin's roles in lipid
+          transport, complement regulation, and cell survival signaling are now
+          considered equally or more important.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          Clusterin (apolipoprotein J) is a multifunctional chaperone. It binds
+          soluble amyloid-beta for clearance across the BBB, but also plays
+          critical roles in lipid transport, complement cascade regulation, and
+          cytoprotective signaling against oxidative stress.
+        layman: >
+          Clusterin is a Swiss Army knife protein — it escorts amyloid out of
+          the brain, helps transport fats, regulates the immune system, and
+          protects cells from stress. The protective version provides more of
+          this multitasker.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+
+      - rsid: rs7561528
+        chrom: chr2
+        pos: 127132061
+        ref: G
+        alt: A
+        gene: BIN1
+        effect: "Near BIN1, involved in tau pathology and microglial activation. OR ~1.15 per copy."
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        confidence_note: >
+          One of the dictionary's strongest entries. Tau interaction confirmed
+          by 2024-2025 research. BIN1 SH3 domain directly binds tau. Also linked
+          to sTREM2, microglial activation, and CSF p-tau levels.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          BIN1's SH3 domain directly binds tau's proline-rich domain and promotes
+          extracellular vesicle-mediated tau spread between neurons. Risk alleles
+          correlate with elevated sTREM2 and CSF p-tau levels, linking tau
+          propagation to microglial activation. Second-strongest common genetic
+          risk factor after APOE.
+        layman: >
+          BIN1 is the second-strongest common risk factor after APOE. It directly
+          grabs tau protein and helps it spread between brain cells. BIN1 risk
+          variants also activate brain immune cells and correlate with higher
+          p-tau levels — relevant to the newest blood-based Alzheimer's tests.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+          - id: bin1_strem2_2024
+            title: "BIN1-sTREM2-Tau pathway in Alzheimer's disease"
+            authors: "Various"
+            year: 2024
+            journal: "Journal of Alzheimer's Disease"
+            finding: "BIN1 variants mediate tau pathology through sTREM2 and microglial activation"
+
+      - rsid: rs3764650
+        chrom: chr19
+        pos: 1046521
+        ref: T
+        alt: G
+        gene: ABCA7
+        effect: "Lipid transporter variant. OR ~1.23 per copy."
+        effect_allele: G
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          Originally described as microglial amyloid phagocytosis. 2025 Nature
+          study revealed ABCA7 LOF disrupts mitochondrial phospholipids and ATP
+          synthase across neural cell types. Lipid-mitochondrial dysfunction may
+          be more fundamental.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ABCA7 is a lipid transporter in microglia and neurons. Loss of function
+          causes (1) impaired microglial phagocytosis and (2) disrupted
+          mitochondrial phospholipids (phosphatidylglycerol, cardiolipin),
+          decreased ATP synthase activity, and altered mitochondrial morphology.
+          snRNA-seq shows widespread effects on lipid metabolism, mitochondria,
+          DNA repair, and synaptic signaling in excitatory neurons.
+        layman: >
+          ABCA7 manages fats in cell membranes. When broken, brain immune cells
+          can't eat plaques AND the power plants inside neurons (mitochondria)
+          malfunction because they're missing key fats. This creates an energy
+          crisis. The mitochondrial problem may be the bigger issue.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+          - id: abca7_nature_2025
+            title: "ABCA7 loss-of-function variants and Alzheimer's disease"
+            authors: "Various"
+            year: 2025
+            journal: "Nature"
+            doi: "10.1038/s41586-025-09520-y"
+            url: "https://doi.org/10.1038/s41586-025-09520-y"
+            finding: "ABCA7 LOF disrupts mitochondrial phospholipids and ATP synthase across neural cell types"
+
+      - rsid: rs11218343
+        chrom: chr11
+        pos: 121564878
+        ref: T
+        alt: C
+        gene: SORL1
+        effect: "Sorting receptor variant. OR ~0.77 per copy."
+        effect_allele: C
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          APP sorting mechanism confirmed. Rare SORL1 LOF variants identified
+          as high-penetrance AD risk factors in WGS studies.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          SORL1 directs APP away from endosomal compartments where it gets
+          cleaved into amyloid-beta. Also critical for intracellular lipid
+          trafficking. Rare LOF SORL1 variants are high-penetrance AD risk
+          factors.
+        layman: >
+          SORL1 is a traffic cop inside brain cells, directing APP toward safe
+          recycling instead of toxic amyloid production. The protective version
+          means a more effective traffic cop. Rare mutations that completely
+          break SORL1 cause very high AD risk.
+        source: "Lambert et al. 2013"
+        studies:
+          - id: lambert_2013
+            title: "Meta-analysis of 74,046 individuals"
+            authors: "Lambert et al."
+            year: 2013
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2802"
+            url: "https://doi.org/10.1038/ng.2802"
+            finding: "Original GWAS identification"
+          - id: sorl1_wgs_2025
+            title: "Whole-genome sequencing identifies SORL1 loss-of-function"
+            authors: "Various"
+            year: 2025
+            journal: "Journal of Neurogenetics"
+            doi: "10.1080/01677063.2025.2561589"
+            url: "https://pubmed.ncbi.nlm.nih.gov/40990081/"
+            finding: "Rare SORL1 LOF variants as high-penetrance AD risk factors"
+
+
+  ############################################################
+  # Later Meta-analysis Loci
+  ############################################################
+
+  - name: "Later Meta-analysis Loci"
+    description: >
+      Additional loci reaching genome-wide significance in post-IGAP
+      meta-analyses (Kunkle 2019, Bellenguez 2022).
+    variants:
+      - rsid: rs138190086
+        chrom: chr17
+        pos: 63460787
+        ref: G
+        alt: A
+        gene: ACE
+        effect: "LOAD risk signal near angiotensin converting enzyme"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ACE degrades amyloid-beta and regulates BBB permeability. This rare
+          variant may reduce its expression or activity.
+        layman: >
+          ACE is best known for blood pressure, but it also helps break down
+          amyloid in the brain. Note: ACE inhibitors don't appear to affect
+          Alzheimer's risk.
+        source: "Kunkle et al. 2019"
+        studies:
+          - id: kunkle_2019
+            title: "Genetic meta-analysis of diagnosed Alzheimer's disease"
+            authors: "Kunkle et al."
+            year: 2019
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-019-0358-2"
+            url: "https://doi.org/10.1038/s41588-019-0358-2"
+            finding: "Genome-wide significant AD risk signal near ACE"
+
+      - rsid: rs593742
+        chrom: chr15
+        pos: 58753576
+        ref: A
+        alt: G
+        gene: ADAM10
+        effect: "Signal near alpha-secretase pathway gene"
+        effect_allele: A
+        effect_direction: protective
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ADAM10 is the main alpha-secretase that cleaves APP within the
+          amyloid-beta region, preventing toxic fragment formation.
+        layman: >
+          There are two ways to cut APP — good and bad. ADAM10 does the good
+          cut, preventing toxic amyloid. This variant boosts the good cutting.
+        source: "Kunkle et al. 2019"
+        studies:
+          - id: kunkle_2019
+            title: "Genetic meta-analysis of diagnosed Alzheimer's disease"
+            authors: "Kunkle et al."
+            year: 2019
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-019-0358-2"
+            url: "https://doi.org/10.1038/s41588-019-0358-2"
+            finding: "Genome-wide significant signal near ADAM10"
+
+      - rsid: rs7185636
+        chrom: chr16
+        pos: 19796841
+        ref: T
+        alt: C
+        gene: IQCK
+        effect: "Genome-wide significant LOAD locus"
+        effect_allele: T
+        effect_direction: protective
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          IQCK encodes an IQ motif-containing protein involved in calmodulin
+          binding and calcium signaling. May support neuronal calcium homeostasis.
+        layman: >
+          Brain cells rely on precise calcium signaling. This gene helps maintain
+          that balance. Calcium chaos is a feature of Alzheimer's-affected neurons.
+        source: "Kunkle et al. 2019"
+        studies:
+          - id: kunkle_2019
+            title: "Genetic meta-analysis of diagnosed Alzheimer's disease"
+            authors: "Kunkle et al."
+            year: 2019
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-019-0358-2"
+            url: "https://doi.org/10.1038/s41588-019-0358-2"
+            finding: "Novel AD locus"
+
+      - rsid: rs2830500
+        chrom: chr21
+        pos: 26784537
+        ref: C
+        alt: A
+        gene: ADAMTS1
+        effect: "Extracellular matrix pathway gene"
+        effect_allele: A
+        effect_direction: protective
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ADAMTS1 is a metalloprotease that remodels extracellular matrix
+          around neurons. May influence synaptic architecture.
+        layman: >
+          Brain cells sit in a mesh of structural proteins. This gene maintains
+          that mesh. The protective version keeps the brain's structural
+          support healthier.
+        source: "Kunkle et al. 2019"
+        studies:
+          - id: kunkle_2019
+            title: "Genetic meta-analysis of diagnosed Alzheimer's disease"
+            authors: "Kunkle et al."
+            year: 2019
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-019-0358-2"
+            url: "https://doi.org/10.1038/s41588-019-0358-2"
+            finding: "Novel AD locus"
+
+      - rsid: rs10437655
+        chrom: chr11
+        pos: 47399348
+        ref: A
+        alt: G
+        gene: SPI1
+        effect: "Master microglial transcription factor (PU.1)"
+        effect_allele: G
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          SPI1 encodes PU.1, a master transcriptional regulator of microglial
+          identity. Risk alleles increase PU.1 expression, upregulating microglial
+          activation programs. PU.1 controls a regulatory hierarchy including
+          MEF2C, ABI3, INPP5D, and other AD-associated genes.
+        layman: >
+          PU.1 is the master switch for brain immune cell identity. It controls
+          a chain of command that includes many other Alzheimer's risk genes.
+          The risk version cranks up immune cell activation, potentially causing
+          harmful inflammation over a lifetime.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "75 risk loci identified, 42 novel; SPI1 confirmed as key immune regulator"
+
+
+  ############################################################
+  # Bellenguez 2022 Novel Loci & Emerging Pathways
+  ############################################################
+
+  - name: "Bellenguez 2022 & Emerging Pathways"
+    description: >
+      Novel loci identified in the Bellenguez et al. 2022 mega-GWAS
+      (111,326 AD cases, 677,663 controls) and Willett et al. 2025
+      multi-ancestry meta-analysis. These represent newly discovered
+      pathways including the LUBAC ubiquitin complex, tau biology,
+      lysosomal-progranulin signaling, and expanded microglial pathways.
+    variants:
+      # ── LUBAC Ubiquitin Pathway ──
+
+      - rsid: rs34173062
+        chrom: chr8
+        pos: 145158277
+        ref: G
+        alt: A
+        gene: SHARPIN
+        effect: "Missense variant (Ser17Phe) in LUBAC complex component"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          SHARPIN encodes a component of the LUBAC (Linear Ubiquitin Chain
+          Assembly Complex), which regulates NF-kB and TNF-alpha signaling.
+          The Ser17Phe missense variant was genome-wide significant for AD risk
+          and associated with reduced entorhinal cortex thickness in UK Biobank
+          imaging data. LUBAC's other component RBCK1 is also an AD locus,
+          confirming this pathway's importance. MAF ~0.07.
+        layman: >
+          SHARPIN is part of a molecular machine that tags proteins with
+          ubiquitin chains — essentially labeling them for the cell's recycling
+          or signaling systems. The risk version alters this machine, which may
+          cause the brain's immune cells to over-react to damage signals over
+          decades.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "SHARPIN and RBCK1 implicate the LUBAC pathway in AD"
+          - id: sharpin_imaging_2020
+            title: "Imaging genomics discovery of a new risk variant for Alzheimer's disease in the postsynaptic SHARPIN gene"
+            authors: "Ning et al."
+            year: 2020
+            journal: "Human Brain Mapping"
+            doi: "10.1002/hbm.25083"
+            url: "https://doi.org/10.1002/hbm.25083"
+            finding: "rs34173062-A associated with reduced entorhinal cortex thickness (p=2.1e-10)"
+
+      # ── Progranulin / Lysosomal Pathway ──
+
+      - rsid: rs5848
+        chrom: chr17
+        pos: 44352876
+        ref: C
+        alt: T
+        gene: GRN
+        effect: "3'UTR variant regulating progranulin levels"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          GRN encodes progranulin, a lysosomal regulator critical for microglial
+          function and neuroinflammation. The T allele of rs5848 creates a
+          miR-659 binding site in the 3'UTR, reducing progranulin mRNA and
+          protein levels. Low progranulin impairs lysosomal proteolysis in
+          microglia and increases TDP-43 aggregation. GRN loss-of-function
+          causes frontotemporal dementia, and reduced levels are implicated in
+          AD through impaired protein clearance.
+        layman: >
+          Progranulin is like an instruction manual for the cell's recycling
+          centers (lysosomes). The risk version reduces progranulin production,
+          meaning the brain's cleanup crew becomes less efficient at removing
+          toxic protein buildup. This gene also causes a related dementia (FTD)
+          when severely mutated.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "GRN confirmed as AD risk locus with lysosomal/microglial pathway role"
+          - id: rademakers_2008
+            title: "Common variation in the miR-659 binding-site of GRN is a major risk factor for TDP43-positive frontotemporal dementia"
+            authors: "Rademakers et al."
+            year: 2008
+            journal: "Human Molecular Genetics"
+            doi: "10.1093/hmg/ddn275"
+            url: "https://doi.org/10.1093/hmg/ddn275"
+            finding: "rs5848 T allele creates miR-659 binding site, reducing GRN levels"
+
+      - rsid: rs1990622
+        chrom: chr7
+        pos: 12229967
+        ref: T
+        alt: C
+        gene: TMEM106B
+        effect: "Lysosomal membrane protein regulating brain aging"
+        effect_allele: C
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          TMEM106B encodes a lysosomal transmembrane protein critical for
+          lysosomal morphology and acidification. The risk allele increases
+          TMEM106B expression, causing lysosomal enlargement and dysfunction.
+          TMEM106B is also the top genetic determinant of brain biological age
+          and a major risk factor for frontotemporal dementia. Its C-terminal
+          fragment forms amyloid fibrils found in aging brains.
+        layman: >
+          TMEM106B controls the structure of the cell's recycling compartments.
+          Too much of this protein makes lysosomes bloated and sluggish. It's
+          also the strongest genetic predictor of how fast your brain ages
+          biologically — a bad sign for any neurodegenerative disease.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "TMEM106B replicated as AD locus, overlap with FTD genetics"
+          - id: schwenk_2024
+            title: "TMEM106B aggregation in neurodegenerative diseases"
+            authors: "Schwenk et al."
+            year: 2024
+            journal: "Trends in Neurosciences"
+            doi: "10.1016/j.tins.2024.01.004"
+            url: "https://doi.org/10.1016/j.tins.2024.01.004"
+            finding: "TMEM106B C-terminal fragments form amyloid fibrils in aging and disease brains"
+
+      # ── APP Metabolism Pathway (Bellenguez Tier 1 genes) ──
+
+      - rsid: rs1140239
+        chrom: chr16
+        pos: 29960056
+        ref: C
+        alt: T
+        gene: DOC2A
+        effect: "APP metabolism pathway gene involved in vesicle exocytosis"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          DOC2A encodes a calcium-dependent protein involved in synaptic vesicle
+          exocytosis and neurotransmitter release. Bellenguez et al. prioritized
+          DOC2A as a Tier 1 gene likely modulating APP metabolism. DOC2A
+          interacts with SNARE complex proteins and UNC13B to regulate vesicle
+          fusion. Disruption may alter APP trafficking through the secretory
+          pathway, affecting amyloid-beta production.
+        layman: >
+          DOC2A helps package and release chemical signals between brain cells.
+          The risk version may disrupt how the amyloid precursor protein (APP)
+          moves through these packaging systems, potentially increasing
+          production of toxic amyloid fragments.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "DOC2A identified as Tier 1 gene modulating APP metabolism"
+
+      # ── ADAM10 Trafficking ──
+
+      - rsid: rs6586028
+        chrom: chr10
+        pos: 81153001
+        ref: G
+        alt: A
+        gene: TSPAN14
+        effect: "ADAM10 trafficking regulator in alpha-secretase pathway"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          TSPAN14 encodes a tetraspanin that directly regulates ADAM10 maturation,
+          trafficking, and activity at the cell surface. ADAM10 is the primary
+          alpha-secretase that cleaves APP in the non-amyloidogenic pathway.
+          TSPAN14 risk variants may reduce ADAM10 surface availability, shifting
+          APP processing toward beta/gamma-secretase (amyloidogenic) cleavage.
+        layman: >
+          TSPAN14 is a chaperone that guides the 'good scissors' (ADAM10) to the
+          cell surface where they can cut APP harmlessly. If TSPAN14 doesn't work
+          well, fewer good scissors reach the surface, and more APP gets cut the
+          bad way — producing toxic amyloid.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "TSPAN14 replicated as AD risk locus, ADAM10 trafficking pathway"
+
+      # ── Additional Microglial Genes ──
+
+      - rsid: rs2245466
+        chrom: chr4
+        pos: 40198204
+        ref: C
+        alt: T
+        gene: RHOH
+        effect: "Microglial-enriched Rho GTPase"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          RHOH encodes an atypical Rho GTPase expressed predominantly in
+          microglia (>90% microglial expression in brain). It regulates
+          cytoskeletal dynamics critical for microglial migration, phagocytosis,
+          and immune synapse formation. Bellenguez et al. identified it as a
+          Tier 1 prioritized gene in a novel locus.
+        layman: >
+          RHOH controls the internal skeleton of the brain's immune cells,
+          affecting how they move toward damage and engulf debris. The risk
+          version may impair these cells' ability to respond appropriately to
+          early signs of disease.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "RHOH identified as Tier 1 microglial gene in novel AD locus"
+
+      - rsid: rs12594637
+        chrom: chr10
+        pos: 96092398
+        ref: G
+        alt: A
+        gene: BLNK
+        effect: "Microglial-enriched B-cell linker protein"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          BLNK (SLP-65) is expressed predominantly in microglia in the brain
+          (>90% microglial expression). Originally known from B-cell receptor
+          signaling, BLNK in microglia likely connects surface receptors
+          (including TREM2) to downstream kinase cascades. Bellenguez
+          prioritized it as Tier 1.
+        layman: >
+          BLNK acts as a wiring hub inside the brain's immune cells, connecting
+          danger sensors on the cell surface to internal response programs.
+          The risk version may cause miswiring, leading to inappropriate
+          immune responses.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "BLNK identified as Tier 1 microglial gene in novel AD locus"
+
+      - rsid: rs875121
+        chrom: chr19
+        pos: 49895053
+        ref: G
+        alt: A
+        gene: SIGLEC11
+        effect: "Microglial Siglec receptor mediating sialic acid recognition"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          SIGLEC11 is a sialic acid-binding immunoglobulin-like lectin expressed
+          in microglia. It recognizes sialic acid residues on neurons and
+          synapses, providing a 'don't eat me' signal. The risk variant may
+          alter microglial recognition of healthy versus damaged neurons,
+          potentially leading to inappropriate synaptic pruning or reduced
+          clearance of damaged cells. Tier 1 prioritized gene from Bellenguez.
+        layman: >
+          Brain immune cells need to tell healthy brain cells from damaged ones.
+          SIGLEC11 reads sugar-coded labels on brain cell surfaces. The risk
+          version may cause these immune cells to misread the labels — either
+          attacking healthy cells or ignoring damaged ones.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "SIGLEC11 identified as Tier 1 microglial gene in novel AD locus"
+
+      - rsid: rs143080277
+        chrom: chr2
+        pos: 105749599
+        ref: G
+        alt: A
+        gene: NCK2
+        effect: "Rare microglial-enriched adaptor protein"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          NCK2 encodes an adaptor protein with SH2/SH3 domains that links
+          receptor tyrosine kinases to downstream signaling. Selectively
+          expressed in microglia in the brain. Rare variant (MAF ~0.005) with
+          larger effect size. May connect TREM2 and other microglial receptors
+          to cytoskeletal remodeling during phagocytosis.
+        layman: >
+          NCK2 is a rare variant that acts as a signal relay station inside
+          the brain's immune cells. Because it's rare but has a larger effect,
+          carriers may have notably different microglial responses to brain
+          damage.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "NCK2 identified as rare microglial-selective AD risk variant"
+
+      # ── NF-kB / TNF-alpha Signaling ──
+
+      - rsid: rs871269
+        chrom: chr5
+        pos: 150813867
+        ref: G
+        alt: A
+        gene: TNIP1
+        effect: "NF-kB signaling inhibitor"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          TNIP1 (ABIN-1) is a negative regulator of NF-kB signaling that
+          restrains inflammatory gene transcription. Risk variants may reduce
+          TNIP1 expression, releasing the brake on NF-kB-driven inflammation.
+          TNIP1 is also associated with ALS, suggesting shared neuroinflammatory
+          mechanisms across neurodegenerative diseases. Works in concert with
+          the LUBAC pathway (SHARPIN, RBCK1).
+        layman: >
+          TNIP1 acts as a brake on inflammation. It keeps the NF-kB alarm system
+          from going off too easily. The risk version weakens this brake,
+          potentially allowing chronic low-grade brain inflammation that
+          accumulates damage over decades.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "TNIP1 in NF-kB pathway confirmed as AD locus; also ALS-associated"
+
+      # ── Tau Biology / Biomarker-Associated ──
+
+      - rsid: rs242557
+        chrom: chr17
+        pos: 45942346
+        ref: G
+        alt: A
+        gene: MAPT
+        effect: "Tau promoter variant increasing MAPT expression (H1c haplotype)"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          rs242557 tags the MAPT H1c sub-haplotype on chromosome 17. The A
+          allele increases MAPT gene expression by ~1.5-fold, producing more
+          tau protein. Higher tau expression provides more substrate for
+          pathological phosphorylation and aggregation. This variant is
+          associated with higher hippocampal tau-PET uptake in non-demented
+          elders and is a confirmed risk factor for tauopathies (PSP, CBD).
+          GWAS of plasma tau levels also implicate this locus. Global MAF=0.36.
+        layman: >
+          This variant acts as a volume knob for tau protein production in the
+          brain. The risk version turns the volume up — more tau means more
+          raw material for the toxic tangles that are a hallmark of Alzheimer's.
+          It also increases risk for other tau-related brain diseases.
+        source: "Multiple studies"
+        studies:
+          - id: myers_2007
+            title: "A survey of genetic human cortical gene expression"
+            authors: "Myers et al."
+            year: 2007
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.2007.16"
+            url: "https://doi.org/10.1038/ng.2007.16"
+            finding: "rs242557-A increases MAPT expression in human cortex"
+          - id: allen_2014
+            title: "Association of MAPT haplotypes with Alzheimer's disease risk"
+            authors: "Allen et al."
+            year: 2014
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1016/j.jalz.2013.08.304"
+            url: "https://doi.org/10.1016/j.jalz.2013.08.304"
+            finding: "H1c haplotype (tagged by rs242557) associated with AD risk"
+          - id: wang_2019_mapt
+            title: "MAPT rs242557 variant is associated with hippocampus tau uptake on 18F-AV-1451 PET"
+            authors: "Wang et al."
+            year: 2019
+            journal: "Aging"
+            doi: "10.18632/aging.101783"
+            url: "https://doi.org/10.18632/aging.101783"
+            finding: "rs242557-A associated with higher hippocampal tau-PET signal in non-demented elders"
+
+      # ── Willett 2025 Multi-Ancestry Loci ──
+
+      - rsid: rs147450666
+        chrom: chr5
+        pos: 127882960
+        ref: G
+        alt: A
+        gene: FBN2
+        effect: "Fibrillin-2 — connective tissue / vascular pathway"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          FBN2 encodes fibrillin-2, an extracellular matrix glycoprotein critical
+          for elastic fiber assembly in connective tissue and vasculature. FBN2
+          is expressed in the choroid plexus, which produces cerebrospinal fluid
+          and maintains the blood-CSF barrier. Risk variants may compromise
+          vascular integrity and CSF homeostasis. A different FBN2 variant is
+          associated with vascular dementia. Identified in multi-ancestry WGS
+          GWAS (Willett 2025).
+        layman: >
+          FBN2 builds the stretchy fibers in blood vessel walls and the brain's
+          fluid-producing tissue. The risk version may weaken these structures,
+          impairing the brain's plumbing system that removes waste products.
+        source: "Willett et al. 2025"
+        studies:
+          - id: willett_2025
+            title: "Identification of 16 novel Alzheimer's disease loci using multi-ancestry meta-analyses"
+            authors: "Willett et al."
+            year: 2025
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.14592"
+            url: "https://doi.org/10.1002/alz.14592"
+            finding: "FBN2/SLC27A6 novel common variant locus for clinically diagnosed AD"
+
+      - rsid: rs200388554
+        chrom: chr18
+        pos: 48556994
+        ref: C
+        alt: T
+        gene: DYM
+        effect: "Oligodendrocyte-enriched protein secretory pathway gene"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          DYM (Dymeclin) is enriched in oligodendrocytes and excitatory/inhibitory
+          neurons. It plays a role in early brain development and protein secretory
+          pathways (Golgi function). Mutations in DYM cause Dyggve-Melchior-Clausen
+          syndrome. The variant may affect myelin maintenance through
+          oligodendrocyte secretory function. Identified in multi-ancestry WGS
+          GWAS with ~50% non-European ancestry (Willett 2025).
+        layman: >
+          DYM helps the brain's insulation-producing cells (oligodendrocytes)
+          package and ship proteins correctly. The risk version may impair
+          myelin maintenance — the insulation that keeps brain signals fast and
+          clean. Myelin loss is an increasingly recognized feature of Alzheimer's.
+        source: "Willett et al. 2025"
+        studies:
+          - id: willett_2025
+            title: "Identification of 16 novel Alzheimer's disease loci using multi-ancestry meta-analyses"
+            authors: "Willett et al."
+            year: 2025
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.14592"
+            url: "https://doi.org/10.1002/alz.14592"
+            finding: "DYM novel common variant locus; enriched in oligodendrocytes"
+
+      - rsid: rs4809823
+        chrom: chr20
+        pos: 50940932
+        ref: A
+        alt: G
+        gene: KCNG1
+        effect: "Voltage-gated potassium channel subunit (synaptic function)"
+        effect_allele: G
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          KCNG1 encodes a voltage-gated potassium channel modifier subunit
+          (Kv6.1) that modulates Kv2.1 channel kinetics. Kv2.1 channels
+          regulate neuronal excitability, neurotransmitter release, and apoptotic
+          potassium efflux. Predicted to be a hub gene for AD-relevant immune
+          pathways. Identified in multi-ancestry GWAS (Willett 2025).
+        layman: >
+          KCNG1 fine-tunes the electrical activity of brain cells by adjusting
+          potassium flow. The risk version may subtly alter how neurons fire,
+          potentially making them more vulnerable to the excitotoxicity seen in
+          Alzheimer's disease.
+        source: "Willett et al. 2025"
+        studies:
+          - id: willett_2025
+            title: "Identification of 16 novel Alzheimer's disease loci using multi-ancestry meta-analyses"
+            authors: "Willett et al."
+            year: 2025
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.14592"
+            url: "https://doi.org/10.1002/alz.14592"
+            finding: "KCNG1 novel AD locus; hub gene for immune pathways"
+
+      - rsid: rs77589046
+        chrom: chr21
+        pos: 31431516
+        ref: G
+        alt: A
+        gene: TIAM1
+        effect: "Rac1 GEF involved in neuronal morphogenesis and synaptic plasticity"
+        effect_allele: A
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          TIAM1 encodes a guanine nucleotide exchange factor (GEF) for Rac1,
+          critical for dendritic spine formation, synaptic plasticity, and
+          NMDA receptor signaling. TIAM1-Rac1 signaling is required for
+          long-term potentiation (memory formation). The variant may impair
+          synaptic maintenance. Identified in multi-ancestry GWAS (Willett 2025).
+        layman: >
+          TIAM1 controls the shape and strength of the connections between brain
+          cells — literally the physical structures that encode memories. The
+          risk version may make these connections less stable, which could
+          accelerate the synapse loss that drives cognitive decline in Alzheimer's.
+        source: "Willett et al. 2025"
+        studies:
+          - id: willett_2025
+            title: "Identification of 16 novel Alzheimer's disease loci using multi-ancestry meta-analyses"
+            authors: "Willett et al."
+            year: 2025
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.14592"
+            url: "https://doi.org/10.1002/alz.14592"
+            finding: "TIAM1 novel AD locus on chromosome 21"
+
+      # ── RTK-MAPK Signaling ──
+
+      - rsid: rs268120
+        chrom: chr2
+        pos: 65166131
+        ref: C
+        alt: T
+        gene: SPRED2
+        effect: "Negative regulator of Ras-MAPK signaling"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          SPRED2 inhibits the Ras-MAPK signaling cascade, which controls cell
+          growth, differentiation, and inflammatory responses in microglia.
+          Risk variants may reduce SPRED2 inhibition, leading to overactive
+          MAPK signaling in brain immune cells. The Ras-MAPK pathway is a
+          drug target under investigation for neuroinflammation.
+        layman: >
+          SPRED2 acts as a brake on a major cell signaling pathway. The risk
+          version weakens this brake in the brain's immune cells, potentially
+          causing them to be chronically overactivated.
+        source: "Bellenguez et al. 2022"
+        studies:
+          - id: bellenguez_2022
+            title: "New insights into the genetic etiology of Alzheimer's disease and related dementias"
+            authors: "Bellenguez et al."
+            year: 2022
+            journal: "Nature Genetics"
+            doi: "10.1038/s41588-022-01024-z"
+            url: "https://doi.org/10.1038/s41588-022-01024-z"
+            finding: "SPRED2 in Ras-MAPK pathway confirmed as novel AD locus"
+
+
+  ############################################################
+  # Rare Variants (Large Effects)
+  ############################################################
+
+  - name: "Rare Variants"
+    description: >
+      Rare coding variants with larger individual effect sizes.
+      Because they are uncommon (MAF < 1%), imputation accuracy is lower.
+      A carrier call at these loci should be confirmed by sequencing.
+    variants:
+      - rsid: rs75932628
+        chrom: chr6
+        pos: 41161514
+        ref: C
+        alt: T
+        gene: TREM2
+        effect: "R47H missense mutation; large risk increase (OR 3.88)"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        confidence_note: >
+          Strongly confirmed. Structural mechanisms precisely characterized:
+          CDR2 loop disruption, allosteric trimer disruption, shifted apoE3
+          binding. Carriers show elevated NfL but not GFAP.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          R47H disrupts TREM2's CDR2 loop, reducing ligand binding. It
+          allosterically disrupts TREM2 trimer formation and shifts apoE3
+          binding into the multimerization interface. Microglia become less
+          effective cleaners and more inflammatory. Carriers show elevated
+          NfL (axonal damage) but not GFAP (glial activation), suggesting
+          selective axonal vulnerability. Soluble TREM2 stalk domain can
+          partially compensate via phospholipid binding.
+        layman: >
+          TREM2 tells brain immune cells what to clean up. This mutation warps
+          TREM2's shape and prevents it from clustering properly. Rare (~0.5%),
+          but carriers have about 4x increased risk. Brain scans show nerve
+          fiber damage specifically, not general inflammation.
+        source: "Jonsson et al. 2013; Guerreiro et al. 2013"
+        studies:
+          - id: jonsson_2013
+            title: "Variant of TREM2 associated with the risk of Alzheimer's disease"
+            authors: "Jonsson et al."
+            year: 2013
+            journal: "NEJM"
+            doi: "10.1056/NEJMoa1211103"
+            url: "https://doi.org/10.1056/NEJMoa1211103"
+            finding: "Original identification of TREM2 R47H as AD risk variant"
+          - id: trem2_structure_2024
+            title: "TREM2-apoE3 interactions: molecular and structural insights"
+            authors: "Various"
+            year: 2024
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.70729"
+            url: "https://doi.org/10.1002/alz.70729"
+            finding: "R47H disrupts CDR2 loop and shifts apoE3 binding"
+          - id: trem2_trimer_2024
+            title: "Multimerization of TREM2 is impaired by AD-associated variants"
+            authors: "Various"
+            year: 2024
+            journal: "Alzheimer's & Dementia"
+            doi: "10.1002/alz.14124"
+            url: "https://doi.org/10.1002/alz.14124"
+            finding: "R47H allosterically disrupts TREM2 trimer formation"
+          - id: trem2_endophenotypes_2025
+            title: "TREM2 risk variants and associated endophenotypes"
+            authors: "Various"
+            year: 2025
+            journal: "Alzheimer's Research & Therapy"
+            doi: "10.1186/s13195-025-01700-2"
+            url: "https://doi.org/10.1186/s13195-025-01700-2"
+            finding: "R47H carriers show elevated NfL but not GFAP; faster cognitive decline"
+
+      - rsid: rs143332484
+        chrom: chr6
+        pos: 41161468
+        ref: C
+        alt: T
+        gene: TREM2
+        effect: "R62H missense mutation; independent risk signal (OR 1.37)"
+        effect_allele: T
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          R62H is a separate TREM2 missense variant impairing ligand binding
+          less severely than R47H. Independent genetic signal operating through
+          a distinct pathogenic mechanism. OR 1.37 vs 3.88 for R47H.
+        layman: >
+          A second, independent mutation in TREM2. Also impairs the immune
+          cleanup signal, but through a different mechanism and with less
+          impact — about 1.4x risk vs R47H's 4x.
+        source: "Sims et al. 2017"
+        studies:
+          - id: sims_2017
+            title: "Rare coding variants in PLCG2, ABI3, and TREM2"
+            authors: "Sims et al."
+            year: 2017
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.3916"
+            url: "https://doi.org/10.1038/ng.3916"
+            finding: "R62H identified as independent TREM2 risk signal"
+
+      - rsid: rs72824905
+        chrom: chr16
+        pos: 81908424
+        ref: C
+        alt: G
+        gene: PLCG2
+        effect: "P522R missense variant protective against AD"
+        effect_allele: G
+        effect_direction: protective
+        confidence_status: current
+        confidence_note: >
+          Protective hypermorph confirmed. Sex-dimorphic effects, region-specific
+          cytokine modulation, gene-gene interaction with APOE4. Bidirectional
+          PLCG2-TREM2 regulatory relationship established.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          PLCG2 P522R is a mild gain-of-function downstream of TREM2. Enhances
+          microglial Ab clearance while preserving synapses. Sex-dimorphic:
+          females get enhanced lysosomal activity; males get decreased phagocytosis.
+          Region-specific brain cytokine modulation. Delays AD onset in heterozygous
+          APOE4 carriers. PLCG2 and TREM2 maintain bidirectional regulatory balance.
+        layman: >
+          If TREM2 is the signal telling immune cells where to go, PLCG2 is
+          the engine. This variant gives a slight boost — enough to improve
+          cleanup without causing damage. Works differently in men and women.
+          Especially helpful for APOE4 carriers.
+        source: "Sims et al. 2017"
+        studies:
+          - id: sims_2017
+            title: "Rare coding variants in PLCG2, ABI3, and TREM2"
+            authors: "Sims et al."
+            year: 2017
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.3916"
+            url: "https://doi.org/10.1038/ng.3916"
+            finding: "Original identification"
+          - id: plcg2_protective_2025
+            title: "The protective PLCg2-P522R variant mitigates AD pathologies"
+            authors: "Various"
+            year: 2025
+            journal: "Journal of Neuroinflammation"
+            doi: "10.1186/s12974-025-03387-6"
+            url: "https://doi.org/10.1186/s12974-025-03387-6"
+            finding: "Enhanced Ab clearance while preserving synapses"
+          - id: plcg2_sex_2024
+            title: "Plcg2-P522R modulates macrophage function in a sex-dimorphic manner"
+            authors: "Various"
+            year: 2024
+            journal: "Journal of Neuroinflammation"
+            doi: "10.1186/s12974-024-03271-9"
+            url: "https://doi.org/10.1186/s12974-024-03271-9"
+            finding: "Sex-dimorphic immune effects"
+          - id: plcg2_apoe4_2026
+            title: "Protective PLCG2 variants associate with delayed onset among APOE e4 carriers"
+            authors: "Various"
+            year: 2026
+            journal: "Alzheimer's Research & Therapy"
+            doi: "10.1186/s13195-026-01957-1"
+            url: "https://doi.org/10.1186/s13195-026-01957-1"
+            finding: "Delays AD onset in heterozygous APOE4 carriers"
+
+      - rsid: rs616338
+        chrom: chr17
+        pos: 49219935
+        ref: T
+        alt: C
+        gene: ABI3
+        effect: "S209F missense variant increasing AD risk"
+        effect_allele: C
+        effect_direction: risk
+        confidence_status: revised
+        confidence_note: >
+          Direction correct but mechanism oversimplified. ABI3 operates in
+          coordinated signaling circuits with CASS4, SRC, LAT2, PTPN6 in
+          specific microglial subtypes.
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          ABI3 is involved in actin cytoskeleton remodeling for microglial
+          phagocytosis. S209F impairs motility, but ABI3 operates in feedback
+          loops with CASS4, SRC, LAT2, PTPN6 that are subtype-specific.
+        layman: >
+          Brain immune cells need to crawl toward problems and eat them. This
+          gene helps build their skeleton for movement. The risk variant makes
+          cells less mobile, but the full picture involves a network of
+          signaling that differs across immune cell types.
+        source: "Sims et al. 2017"
+        studies:
+          - id: sims_2017
+            title: "Rare coding variants in PLCG2, ABI3, and TREM2"
+            authors: "Sims et al."
+            year: 2017
+            journal: "Nature Genetics"
+            doi: "10.1038/ng.3916"
+            url: "https://doi.org/10.1038/ng.3916"
+            finding: "Original identification"
+          - id: abi3_network_2024
+            title: "Network dynamics-based subtyping of AD with microglial risk factors"
+            authors: "Various"
+            year: 2024
+            journal: "Alzheimer's Research & Therapy"
+            doi: "10.1186/s13195-024-01583-9"
+            url: "https://doi.org/10.1186/s13195-024-01583-9"
+            finding: "ABI3 in feedback loops with CASS4, SRC, LAT2, PTPN6"
+
+
+  ############################################################
+  # Deterministic Early-Onset Alzheimer's Disease (EOAD)
+  ############################################################
+
+  - name: "Deterministic Genes (Not Interpretable)"
+    description: >
+      Mutations in these genes cause early-onset Alzheimer's, but 23andMe
+      redacts the raw data for these medically actionable regions. The
+      imputed data shown here is statistical guesswork and cannot be used
+      to determine whether you carry a disease-causing mutation. Clinical
+      genetic testing is required for meaningful results.
+    regions:
+      - gene: APP
+        chrom: chr21
+        start: 26609429
+        end: 26675995
+        effect: "Amyloid precursor protein mutations cause familial EOAD"
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          APP encodes the amyloid precursor protein. Mutations alter enzyme
+          cutting sites, producing sticky amyloid-beta fragments that clump
+          into plaques.
+        layman: >
+          Mutations here are extremely rare but virtually guarantee early-onset
+          Alzheimer's (usually before age 65).
+        likely_redacted: true
+
+      - gene: PSEN1
+        chrom: chr14
+        start: 73136417
+        end: 73223691
+        effect: "Presenilin-1 mutations cause familial EOAD"
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          PSEN1 encodes the catalytic core of gamma-secretase. Over 300 known
+          mutations shift the cut point, producing longer, stickier amyloid-beta-42.
+        layman: >
+          The most common cause of inherited early-onset Alzheimer's. Mutations
+          make molecular scissors cut APP in the wrong place.
+        likely_redacted: true
+
+      - gene: PSEN2
+        chrom: chr1
+        start: 226870616
+        end: 226903668
+        effect: "Presenilin-2 mutations cause familial EOAD"
+        effect_direction: risk
+        confidence_status: current
+        last_reviewed: "2026-03-11"
+        mechanism: >
+          PSEN2 is a paralog of PSEN1 in the gamma-secretase complex. Mutations
+          have similar effects but with later onset and more variable penetrance.
+        layman: >
+          A backup copy of PSEN1. Mutations also cause inherited Alzheimer's
+          but typically with later and more variable onset. Very rare.
+        likely_redacted: true

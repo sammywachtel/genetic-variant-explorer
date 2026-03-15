@@ -1,0 +1,31 @@
+# ─── Private genetic data ─────────────────────────────────────────────────────
+# This is the whole point of the gitignore. Don't commit your genome.
+genomes/
+*.zip
+
+# ─── Docker development environment (local only) ─────────────────────────────
+.docker-dev/
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# ─── Node / Frontend ────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+
+# ─── IDE & OS ────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ─── Local docs / design iterations ─────────────────────────────────────────
+.local_docs/
+
+# ─── Claude Code ─────────────────────────────────────────────────────────────
+.claude/

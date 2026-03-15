@@ -1,0 +1,376 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# apoe_from_bcf.sh
+#
+# Purpose:
+#   1) Read a chr19 variant file that bcftools can open (BCF or VCF/VCF.GZ)
+#   2) Extract the APOE-defining SNPs:
+#        rs429358 = chr19:44908684
+#        rs7412   = chr19:44908822
+#   3) Print a human-readable interpretation
+#   4) Create an IGV-friendly .vcf.gz + .tbi if needed
+#   5) Print exact IGV steps to reproduce the result visually
+#
+# Notes:
+#   - Coordinates below assume GRCh38 / hg38.
+#   - If your file is mislabeled but bcftools can still read it, this script may still work.
+#   - If the input is a BCF, this script will create a bgzipped VCF for IGV.
+
+usage() {
+  cat <<'EOF'
+Usage:
+  ./run <input_variant_file> [output_directory]
+
+Examples:
+  ./run sam/chr19_fixed.bcf
+  ./run olga/chr19.bcf results/
+
+What the script does:
+  - Ensures the input is indexed if needed
+  - Queries the two APOE SNP positions
+  - Attempts to interpret APOE genotype (E2/E2, E2/E3, E3/E3, E3/E4, E4/E4, or ambiguous)
+  - Writes an IGV-compatible VCF and index in the output directory:
+      apoe_extraction.vcf.gz
+      apoe_extraction.vcf.gz.tbi
+
+How to interpret the results:
+  APOE is determined from these two SNPs:
+    rs429358 at chr19:44908684
+    rs7412   at chr19:44908822
+
+  Haplotype definitions:
+    E2 = rs429358 T  + rs7412 T
+    E3 = rs429358 T  + rs7412 C
+    E4 = rs429358 C  + rs7412 C
+
+  Common genotype combinations:
+    rs429358 T/T and rs7412 C/C  => E3/E3
+    rs429358 C/T and rs7412 C/C  => E3/E4
+    rs429358 T/T and rs7412 C/T  => E2/E3
+    rs429358 C/C and rs7412 C/C  => E4/E4
+    rs429358 T/T and rs7412 T/T  => E2/E2
+    rs429358 C/T and rs7412 C/T  => often E2/E4, but phase matters
+
+IGV steps:
+  1) Open IGV
+  2) Set the genome build to hg38 / GRCh38
+  3) Load:
+       apoe_extraction.vcf.gz
+  4) In the search box, go to:
+       chr19:44908650-44908850
+     or directly:
+       chr19:44908684
+       chr19:44908822
+  5) Click the variant markers at those positions
+  6) Inspect:
+       - rsID
+       - REF / ALT
+       - genotype/sample fields
+
+Requirements:
+  - bcftools
+  - tabix
+  - awk
+EOF
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || {
+    echo "ERROR: Required command not found: $1" >&2
+    exit 1
+  }
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || $# -lt 1 ]]; then
+  usage
+  exit 0
+fi
+
+require_cmd bcftools
+require_cmd tabix
+require_cmd awk
+
+INPUT="$1"
+if [[ ! -f "$INPUT" ]]; then
+  echo "ERROR: Input file not found: $INPUT" >&2
+  exit 1
+fi
+
+if [[ $# -ge 2 ]]; then
+  OUT_DIR="$2"
+else
+  OUT_DIR="$(cd "$(dirname "$INPUT")" && pwd)"
+fi
+
+# The output name says exactly what it is
+OUT_VCF="${OUT_DIR}/apoe_extraction.vcf.gz"
+RESULTS_FILE="${OUT_DIR}/apoe_results.txt"
+if [[ -f "$OUT_VCF" && -f "${OUT_VCF}.tbi" && -f "$RESULTS_FILE" ]]; then
+  echo "Already done. Saved results:"
+  echo
+  cat "$RESULTS_FILE"
+  exit 0
+fi
+
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$TMPDIR"' EXIT
+
+echo "=== APOE extraction and interpretation ==="
+echo "Input: $INPUT"
+echo "Output: $OUT_VCF"
+echo
+
+# Make sure bcftools can read the file at all
+echo "[1/6] Checking header readability..."
+bcftools view -h "$INPUT" >/dev/null
+echo "OK: bcftools can read the file."
+echo
+
+# Index the input so bcftools can do region queries.
+# Track whether the .csi existed before so we can clean up our mess.
+echo "[2/6] Ensuring the input has an index..."
+INPUT_CSI="${INPUT}.csi"
+CREATED_INDEX=false
+[[ ! -f "$INPUT_CSI" ]] && CREATED_INDEX=true
+
+if bcftools index -f "$INPUT" >/dev/null 2>&1; then
+  echo "Index created/refreshed successfully."
+else
+  echo "Index creation was not completed directly."
+  echo "This can be normal for some formats if an index already exists or if the file is not indexable as-is."
+fi
+echo
+
+# Detect which FORMAT fields the file has so we don't request missing ones
+echo "[3/6] Querying APOE positions..."
+HAS_GT=false
+HAS_HDS=false
+bcftools view -h "$INPUT" | grep -q '##FORMAT=<ID=GT,' && HAS_GT=true || true
+bcftools view -h "$INPUT" | grep -q '##FORMAT=<ID=HDS,' && HAS_HDS=true || true
+
+# Build the format string from what's actually available
+FMT='%CHROM\t%POS\t%ID\t%REF\t%ALT'
+if $HAS_GT; then
+  FMT="${FMT}[\t%GT][\t%TGT]"
+fi
+if $HAS_HDS; then
+  FMT="${FMT}[\t%HDS]"
+fi
+FMT="${FMT}\n"
+
+RAW_QUERY="${TMPDIR}/apoe_raw.tsv"
+bcftools query \
+  -f "$FMT" \
+  -r chr19:44908684,chr19:44908822 \
+  "$INPUT" > "$RAW_QUERY"
+
+if [[ ! -s "$RAW_QUERY" ]]; then
+  echo "ERROR: No records were returned for chr19:44908684 / chr19:44908822" >&2
+  echo "Possible reasons:"
+  echo "  - wrong genome build"
+  echo "  - chromosome naming mismatch"
+  echo "  - file does not contain these sites"
+  echo "  - file/index format issue"
+  exit 1
+fi
+
+echo "Raw APOE query results:"
+cat "$RAW_QUERY"
+echo
+
+echo "[4/6] Interpreting results..."
+
+rs429358_line="$(awk '$2==44908684 {print; exit}' "$RAW_QUERY" || true)"
+rs7412_line="$(awk '$2==44908822 {print; exit}' "$RAW_QUERY" || true)"
+
+if [[ -z "$rs429358_line" || -z "$rs7412_line" ]]; then
+  echo "ERROR: Could not find both APOE-defining positions in the query output." >&2
+  exit 1
+fi
+
+get_field_or_blank() {
+  local line="$1"
+  local n="$2"
+  awk -v n="$n" '{ if (NF>=n) print $n; else print "" }' <<< "$line"
+}
+
+# Field layout depends on which FORMAT tags exist:
+#   Base fields: CHROM(1) POS(2) ID(3) REF(4) ALT(5)
+#   If GT+HDS:  GT(6) TGT(7) HDS(8)
+#   If GT only: GT(6) TGT(7)
+#   If HDS only: HDS(6)
+r1_ref="$(get_field_or_blank "$rs429358_line" 4)"
+r1_alt="$(get_field_or_blank "$rs429358_line" 5)"
+r2_ref="$(get_field_or_blank "$rs7412_line" 4)"
+r2_alt="$(get_field_or_blank "$rs7412_line" 5)"
+
+r1_gt="" ; r1_tgt="" ; r1_hds=""
+r2_gt="" ; r2_tgt="" ; r2_hds=""
+
+if $HAS_GT && $HAS_HDS; then
+  r1_gt="$(get_field_or_blank "$rs429358_line" 6)"
+  r1_tgt="$(get_field_or_blank "$rs429358_line" 7)"
+  r1_hds="$(get_field_or_blank "$rs429358_line" 8)"
+  r2_gt="$(get_field_or_blank "$rs7412_line" 6)"
+  r2_tgt="$(get_field_or_blank "$rs7412_line" 7)"
+  r2_hds="$(get_field_or_blank "$rs7412_line" 8)"
+elif $HAS_GT; then
+  r1_gt="$(get_field_or_blank "$rs429358_line" 6)"
+  r1_tgt="$(get_field_or_blank "$rs429358_line" 7)"
+  r2_gt="$(get_field_or_blank "$rs7412_line" 6)"
+  r2_tgt="$(get_field_or_blank "$rs7412_line" 7)"
+elif $HAS_HDS; then
+  r1_hds="$(get_field_or_blank "$rs429358_line" 6)"
+  r2_hds="$(get_field_or_blank "$rs7412_line" 6)"
+fi
+
+echo "Position summaries:"
+echo "  rs429358  chr19:44908684  REF=${r1_ref} ALT=${r1_alt} GT=${r1_gt:-NA} TGT=${r1_tgt:-NA} HDS=${r1_hds:-NA}"
+echo "  rs7412    chr19:44908822  REF=${r2_ref} ALT=${r2_alt} GT=${r2_gt:-NA} TGT=${r2_tgt:-NA} HDS=${r2_hds:-NA}"
+echo
+
+interpretation="Unable to determine APOE genotype from available fields."
+details="The file did not provide enough simple genotype information for a clean automatic call."
+
+# Convert HDS (two comma-separated ALT dosages per haplotype) into allele calls.
+# Each value is the probability of ALT on that haplotype: ~0 = REF, ~1 = ALT.
+hds_to_alleles() {
+  local ref="$1" alt="$2" hds="$3"
+  local h1 h2 a1 a2
+  h1="${hds%%,*}"
+  h2="${hds##*,}"
+  # Round: <= 0.5 is REF, > 0.5 is ALT
+  a1="$(awk -v h="$h1" -v r="$ref" -v a="$alt" 'BEGIN { print (h > 0.5) ? a : r }')"
+  a2="$(awk -v h="$h2" -v r="$ref" -v a="$alt" 'BEGIN { print (h > 0.5) ? a : r }')"
+  echo "${a1}/${a2}"
+}
+
+# Priority: TGT > GT > HDS
+if [[ -n "${r1_tgt}" && -n "${r2_tgt}" ]]; then
+  a1="${r1_tgt//|//}"
+  a2="${r2_tgt//|//}"
+elif [[ -n "${r1_gt}" && -n "${r2_gt}" ]]; then
+  # Convert numeric GT to allele calls if REF/ALT match expectations
+  if [[ "$r1_ref" == "T" && "$r1_alt" == "C" && "$r2_ref" == "C" && "$r2_alt" == "T" ]]; then
+    case "${r1_gt}|${r2_gt}" in
+      "0/0|0/0"|"0|0|0|0")       a1="T/T"; a2="C/C" ;;
+      "0/1|0/0"|"0|1|0|0")       a1="T/C"; a2="C/C" ;;
+      "1/0|0/0"|"1|0|0|0")       a1="C/T"; a2="C/C" ;;
+      "0/0|0/1"|"0|0|0|1")       a1="T/T"; a2="C/T" ;;
+      "0/0|1/0"|"0|0|1|0")       a1="T/T"; a2="T/C" ;;
+      "1/1|0/0"|"1|1|0|0")       a1="C/C"; a2="C/C" ;;
+      "0/0|1/1"|"0|0|1|1")       a1="T/T"; a2="T/T" ;;
+      "0/1|0/1"|"0|1|0|1")       a1="T/C"; a2="C/T" ;;
+      "1/0|0/1"|"1|0|0|1")       a1="C/T"; a2="C/T" ;;
+      "0/1|1/0"|"0|1|1|0")       a1="T/C"; a2="T/C" ;;
+      "1/0|1/0"|"1|0|1|0")       a1="C/T"; a2="T/C" ;;
+      *) a1=""; a2="" ;;
+    esac
+  fi
+elif [[ -n "${r1_hds}" && -n "${r2_hds}" ]]; then
+  a1="$(hds_to_alleles "$r1_ref" "$r1_alt" "$r1_hds")"
+  a2="$(hds_to_alleles "$r2_ref" "$r2_alt" "$r2_hds")"
+fi
+
+# Now interpret from allele calls (a1 = rs429358, a2 = rs7412)
+# Sort each pair so T/C and C/T are treated the same
+sort_alleles() { echo "$1" | tr '/' '\n' | sort | tr '\n' '/' | sed 's|/$||'; }
+
+if [[ -n "${a1:-}" && -n "${a2:-}" ]]; then
+  s1="$(sort_alleles "$a1")"
+  s2="$(sort_alleles "$a2")"
+
+  if [[ "$s1" == "T/T" && "$s2" == "C/C" ]]; then
+    interpretation="APOE result: E3/E3"
+    details="rs429358 is T/T and rs7412 is C/C, which corresponds to E3/E3."
+  elif [[ "$s1" == "C/T" && "$s2" == "C/C" ]]; then
+    interpretation="APOE result: E3/E4"
+    details="rs429358 is het (C/T) and rs7412 is C/C, which corresponds to E3/E4."
+  elif [[ "$s1" == "T/T" && "$s2" == "C/T" ]]; then
+    interpretation="APOE result: E2/E3"
+    details="rs429358 is T/T and rs7412 is het (C/T), which corresponds to E2/E3."
+  elif [[ "$s1" == "C/C" && "$s2" == "C/C" ]]; then
+    interpretation="APOE result: E4/E4"
+    details="rs429358 is C/C and rs7412 is C/C, which corresponds to E4/E4."
+  elif [[ "$s1" == "T/T" && "$s2" == "T/T" ]]; then
+    interpretation="APOE result: E2/E2"
+    details="rs429358 is T/T and rs7412 is T/T, which corresponds to E2/E2."
+  elif [[ "$s1" == "C/T" && "$s2" == "C/T" ]]; then
+    interpretation="APOE result: likely E2/E4, but phase matters"
+    details="Both sites are heterozygous. That pattern is commonly interpreted as E2/E4, but phasing matters for certainty."
+  fi
+fi
+
+echo "$interpretation"
+echo "$details"
+echo
+
+# Save results so re-runs can show them without redoing the work
+cat > "$RESULTS_FILE" <<RESULTS
+$interpretation
+$details
+
+Position data:
+  rs429358  chr19:44908684  REF=${r1_ref} ALT=${r1_alt} GT=${r1_gt:-NA} TGT=${r1_tgt:-NA} HDS=${r1_hds:-NA}
+  rs7412    chr19:44908822  REF=${r2_ref} ALT=${r2_alt} GT=${r2_gt:-NA} TGT=${r2_tgt:-NA} HDS=${r2_hds:-NA}
+RESULTS
+
+# Create IGV-friendly output
+echo "[5/6] Creating IGV-compatible VCF.GZ..."
+bcftools view -Oz -o "$OUT_VCF" "$INPUT"
+tabix -f -p vcf "$OUT_VCF"
+echo "Created:"
+echo "  $OUT_VCF"
+echo "  ${OUT_VCF}.tbi"
+echo
+
+echo "[6/6] IGV instructions"
+cat <<EOF
+Open IGV and do the following:
+
+1) Genome:
+   Set genome to hg38 / GRCh38
+
+2) Load file:
+   File -> Load from File...
+   Choose:
+     $OUT_VCF
+
+3) Search these locations:
+   chr19:44908650-44908850
+
+   Or one at a time:
+   chr19:44908684
+   chr19:44908822
+
+4) What to click:
+   Click the variant marker at chr19:44908684 to inspect rs429358
+   Click the variant marker at chr19:44908822 to inspect rs7412
+
+5) What you should see:
+   - rsID
+   - REF and ALT
+   - sample/genotype fields
+   - the same underlying variants used for the APOE interpretation above
+
+6) How to compare with this script:
+   This script used these sites:
+     rs429358 = chr19:44908684
+     rs7412   = chr19:44908822
+
+   Reported result:
+     $interpretation
+
+   Meaning:
+     $details
+EOF
+
+echo
+
+# Clean up the .csi index if we created it — it's just a byproduct of our query
+if $CREATED_INDEX && [[ -f "$INPUT_CSI" ]]; then
+  rm "$INPUT_CSI"
+fi
+
+echo "Done."
