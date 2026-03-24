@@ -3,7 +3,8 @@ Auto-discovers genome directories and loads genotype data.
 
 Directory structure per person:
     genomes/{person}/
-        raw/        Directly measured 23andMe chip data (~550K SNPs, rsID-indexed)
+        raw/        Directly measured chip data (~550-700K SNPs, rsID-indexed)
+                    Supports 23andMe (4-col) and Ancestry (5-col) formats
         phased/     Phased chip data (allele1/allele2 separated by chromosome)
         imputed/    Statistically inferred BCF files (~30-40M positions)
         zips/       Original zip archives
@@ -12,6 +13,7 @@ Data priority: raw > phased > imputed
   - Raw/phased = directly measured on the genotyping chip = high confidence
   - Imputed = statistically guessed from nearby markers = lower confidence
   - For any given rsID, we use the best available source
+  - Multiple raw sources (23andMe + Ancestry) merge by rsID, first-seen wins
 """
 
 from __future__ import annotations
@@ -74,7 +76,7 @@ def list_data_sources(person: str, genomes_dir: Path | None = None) -> list[str]
     return sources
 
 
-# ─── Raw/Phased 23andMe Data ──────────────────────────────────────────────────
+# ─── Raw/Phased Chip Data (23andMe, Ancestry, etc.) ──────────────────────────
 
 def _ranked_chip_files(person: str, genomes_dir: Path | None = None) -> list[tuple[Path, str]]:
     """
@@ -82,10 +84,11 @@ def _ranked_chip_files(person: str, genomes_dir: Path | None = None) -> list[tup
     Each entry is (path, source_label).
 
     Priority:
-      1. raw genome — unmodified chip readout, full SNP set
-      2. phased_with_parents — best phasing, but may drop some SNPs
-      3. phased_genome (main) — standard phased file
-      4. other phased files (not statistical/one_parent)
+      1. raw 23andMe genome — unmodified chip readout, full SNP set
+      2. raw Ancestry data — same tier, backfills SNPs 23andMe missed
+      3. phased_with_parents — best phasing, but may drop some SNPs
+      4. phased_genome (main) — standard phased file
+      5. other phased files (not statistical/one_parent)
 
     We load them all so higher-priority files establish each rsID's value,
     and lower-priority files backfill any SNPs the better file missed.
@@ -94,10 +97,12 @@ def _ranked_chip_files(person: str, genomes_dir: Path | None = None) -> list[tup
     person_dir = genomes_dir / person
     files: list[tuple[Path, str]] = []
 
-    # Raw first
+    # Raw first — 23andMe files, then Ancestry, then any other .txt
     raw_dir = person_dir / "raw"
     if raw_dir.is_dir():
         for f in sorted(raw_dir.glob("genome_*.txt")):
+            files.append((f, "raw"))
+        for f in sorted(raw_dir.glob("Ancestry*.txt")):
             files.append((f, "raw"))
 
     # Then phased, in quality order
@@ -116,8 +121,13 @@ def _ranked_chip_files(person: str, genomes_dir: Path | None = None) -> list[tup
 
 
 def _parse_chip_file(chip_file: Path, source: str) -> dict[str, dict]:
-    """Parse a single 23andMe chip file into an rsID-indexed dict."""
-    is_phased = "phased" in chip_file.parent.name
+    """
+    Parse a chip file (23andMe or Ancestry) into an rsID-indexed dict.
+
+    Auto-detects format by column count:
+      4 columns = 23andMe raw (rsid chrom pos genotype)
+      5 columns = Ancestry / 23andMe phased (rsid chrom pos allele1 allele2)
+    """
     data: dict[str, dict] = {}
 
     with open(chip_file) as f:
@@ -126,18 +136,22 @@ def _parse_chip_file(chip_file: Path, source: str) -> dict[str, dict]:
                 continue
             parts = line.strip().split("\t")
             rsid = parts[0]
-            if not rsid.startswith("rs"):
+            # Skip non-rs lines and header rows. "rsid" annoyingly starts with "rs"
+            if not rsid.startswith("rs") or rsid == "rsid":
                 continue
 
             chrom = parts[1]
             pos = int(parts[2])
 
-            if is_phased:
-                # phased: rsid chrom pos allele1 allele2
+            if len(parts) >= 5:
+                # 5-col: Ancestry or 23andMe phased (rsid chrom pos allele1 allele2)
                 a1, a2 = parts[3], parts[4]
-                genotype = f"{a1}/{a2}"
+                if a1 == "0" or a2 == "0":
+                    genotype = "no data"
+                else:
+                    genotype = f"{a1}/{a2}"
             else:
-                # raw: rsid chrom pos genotype
+                # 4-col: 23andMe raw (rsid chrom pos genotype)
                 gt = parts[3]
                 if len(gt) == 2:
                     genotype = f"{gt[0]}/{gt[1]}"
